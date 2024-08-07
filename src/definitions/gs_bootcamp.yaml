@@ -3,12 +3,15 @@ User:
   properties:
     email:
       type: string
+      format: email       
     first_name:
       type: string
     last_name:
       type: string
     password:
       type: string
+      minLength: 6
+      maxLength: 20
     createdAt:
       type: string
       format: date-time
@@ -19,7 +22,7 @@ Profile:
   type: object
   properties:
     contact:
-      type: string
+      type: integer
     city:
       type: string
     gender:
@@ -27,8 +30,10 @@ Profile:
       enum:
         - Male
         - Female
+        - Other
     age:
       type: integer
+      minimum: 18
     type:
       type: string
       enum:
