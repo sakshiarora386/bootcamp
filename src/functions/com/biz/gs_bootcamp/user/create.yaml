@@ -1,0 +1,6 @@
+summary: Create User
+tasks:
+  - id: gs_bootcamp_user_create
+    fn: datasource.gs_bootcamp.User.create
+    args:
+      data: <% inputs.body %>

@@ -1,0 +1,6 @@
+summary: Create Profile
+tasks:
+  - id: gs_bootcamp_profile_create
+    fn: datasource.gs_bootcamp.Profile.create
+    args:
+      data: <% inputs.body %>

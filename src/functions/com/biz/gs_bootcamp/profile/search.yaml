@@ -1,0 +1,5 @@
+summary: Fetch many Profile
+tasks:
+  - id: gs_bootcamp_profile_search
+    fn: datasource.gs_bootcamp.Profile.findMany
+    args: {}

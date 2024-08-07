@@ -1,0 +1,7 @@
+summary: Fetch Profile
+tasks:
+  - id: gs_bootcamp_profile_one
+    fn: datasource.gs_bootcamp.Profile.findUnique
+    args:
+      where:
+        id: <% inputs.params.id %>

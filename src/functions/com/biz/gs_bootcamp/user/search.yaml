@@ -1,0 +1,5 @@
+summary: Fetch many User
+tasks:
+  - id: gs_bootcamp_user_search
+    fn: datasource.gs_bootcamp.User.findMany
+    args: {}

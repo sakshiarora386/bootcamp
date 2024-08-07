@@ -1,0 +1,7 @@
+summary: Fetch User
+tasks:
+  - id: gs_bootcamp_user_one
+    fn: datasource.gs_bootcamp.User.findUnique
+    args:
+      where:
+        id: <% inputs.params.id %>

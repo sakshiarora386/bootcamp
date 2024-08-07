@@ -1,0 +1,7 @@
+summary: Delete User
+tasks:
+  - id: gs_bootcamp_user_delete
+    fn: datasource.gs_bootcamp.User.delete
+    args:
+      where:
+        id: <% inputs.params.id %>
