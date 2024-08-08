@@ -34,10 +34,10 @@ model Profile {
   userId        String  @unique @db.ObjectId
 }
 enum StudentType {
-College student
+CollegeStudent
 Fresher
-Working professional
-Woman returning to work
+WorkingProfessional
+Woman_Returning_to_work
 }
 
 enum Gender {

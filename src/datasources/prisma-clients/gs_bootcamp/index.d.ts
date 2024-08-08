@@ -38,9 +38,9 @@ export type Gender = (typeof Gender)[keyof typeof Gender]
 
 
 export const StudentType: {
-  College_Student: 'College_Student',
+  CollegeStudent: 'CollegeStudent',
   Fresher: 'Fresher',
-  Working_Professional: 'Working_Professional',
+  WorkingProfessional: 'WorkingProfessional',
   Woman_Returning_to_work: 'Woman_Returning_to_work'
 };
 
@@ -1949,14 +1949,12 @@ export namespace Prisma {
   }
 
   export type ProfileAvgAggregateOutputType = {
-    contact: number | null
     age: number | null
     passing_year: number | null
     experience: number | null
   }
 
   export type ProfileSumAggregateOutputType = {
-    contact: number | null
     age: number | null
     passing_year: number | null
     experience: number | null
@@ -1964,7 +1962,7 @@ export namespace Prisma {
 
   export type ProfileMinAggregateOutputType = {
     id: string | null
-    contact: number | null
+    contact: string | null
     city: string | null
     gender: $Enums.Gender | null
     age: number | null
@@ -1978,7 +1976,7 @@ export namespace Prisma {
 
   export type ProfileMaxAggregateOutputType = {
     id: string | null
-    contact: number | null
+    contact: string | null
     city: string | null
     gender: $Enums.Gender | null
     age: number | null
@@ -2007,14 +2005,12 @@ export namespace Prisma {
 
 
   export type ProfileAvgAggregateInputType = {
-    contact?: true
     age?: true
     passing_year?: true
     experience?: true
   }
 
   export type ProfileSumAggregateInputType = {
-    contact?: true
     age?: true
     passing_year?: true
     experience?: true
@@ -2151,7 +2147,7 @@ export namespace Prisma {
 
   export type ProfileGroupByOutputType = {
     id: string
-    contact: number
+    contact: string
     city: string
     gender: $Enums.Gender
     age: number
@@ -2223,7 +2219,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      contact: number
+      contact: string
       city: string
       gender: $Enums.Gender
       age: number
@@ -2627,7 +2623,7 @@ export namespace Prisma {
    */ 
   interface ProfileFieldRefs {
     readonly id: FieldRef<"Profile", 'String'>
-    readonly contact: FieldRef<"Profile", 'Int'>
+    readonly contact: FieldRef<"Profile", 'String'>
     readonly city: FieldRef<"Profile", 'String'>
     readonly gender: FieldRef<"Profile", 'Gender'>
     readonly age: FieldRef<"Profile", 'Int'>
@@ -3061,20 +3057,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Gender'
    */
   export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender'>
@@ -3085,6 +3067,20 @@ export namespace Prisma {
    * Reference to a field of type 'Gender[]'
    */
   export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -3189,7 +3185,7 @@ export namespace Prisma {
     OR?: ProfileWhereInput[]
     NOT?: ProfileWhereInput | ProfileWhereInput[]
     id?: StringFilter<"Profile"> | string
-    contact?: IntFilter<"Profile"> | number
+    contact?: StringFilter<"Profile"> | string
     city?: StringFilter<"Profile"> | string
     gender?: EnumGenderFilter<"Profile"> | $Enums.Gender
     age?: IntFilter<"Profile"> | number
@@ -3223,7 +3219,7 @@ export namespace Prisma {
     AND?: ProfileWhereInput | ProfileWhereInput[]
     OR?: ProfileWhereInput[]
     NOT?: ProfileWhereInput | ProfileWhereInput[]
-    contact?: IntFilter<"Profile"> | number
+    contact?: StringFilter<"Profile"> | string
     city?: StringFilter<"Profile"> | string
     gender?: EnumGenderFilter<"Profile"> | $Enums.Gender
     age?: IntFilter<"Profile"> | number
@@ -3259,7 +3255,7 @@ export namespace Prisma {
     OR?: ProfileScalarWhereWithAggregatesInput[]
     NOT?: ProfileScalarWhereWithAggregatesInput | ProfileScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Profile"> | string
-    contact?: IntWithAggregatesFilter<"Profile"> | number
+    contact?: StringWithAggregatesFilter<"Profile"> | string
     city?: StringWithAggregatesFilter<"Profile"> | string
     gender?: EnumGenderWithAggregatesFilter<"Profile"> | $Enums.Gender
     age?: IntWithAggregatesFilter<"Profile"> | number
@@ -3343,7 +3339,7 @@ export namespace Prisma {
 
   export type ProfileCreateInput = {
     id?: string
-    contact: number
+    contact: string
     city: string
     gender: $Enums.Gender
     age: number
@@ -3357,7 +3353,7 @@ export namespace Prisma {
 
   export type ProfileUncheckedCreateInput = {
     id?: string
-    contact: number
+    contact: string
     city: string
     gender: $Enums.Gender
     age: number
@@ -3370,7 +3366,7 @@ export namespace Prisma {
   }
 
   export type ProfileUpdateInput = {
-    contact?: IntFieldUpdateOperationsInput | number
+    contact?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     age?: IntFieldUpdateOperationsInput | number
@@ -3383,7 +3379,7 @@ export namespace Prisma {
   }
 
   export type ProfileUncheckedUpdateInput = {
-    contact?: IntFieldUpdateOperationsInput | number
+    contact?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     age?: IntFieldUpdateOperationsInput | number
@@ -3397,7 +3393,7 @@ export namespace Prisma {
 
   export type ProfileCreateManyInput = {
     id?: string
-    contact: number
+    contact: string
     city: string
     gender: $Enums.Gender
     age: number
@@ -3410,7 +3406,7 @@ export namespace Prisma {
   }
 
   export type ProfileUpdateManyMutationInput = {
-    contact?: IntFieldUpdateOperationsInput | number
+    contact?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     age?: IntFieldUpdateOperationsInput | number
@@ -3422,7 +3418,7 @@ export namespace Prisma {
   }
 
   export type ProfileUncheckedUpdateManyInput = {
-    contact?: IntFieldUpdateOperationsInput | number
+    contact?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     age?: IntFieldUpdateOperationsInput | number
@@ -3527,6 +3523,13 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumGenderFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    not?: NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -3536,13 +3539,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type EnumGenderFilter<$PrismaModel = never> = {
-    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
-    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    not?: NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
   }
 
   export type EnumStudentTypeFilter<$PrismaModel = never> = {
@@ -3572,7 +3568,6 @@ export namespace Prisma {
   }
 
   export type ProfileAvgOrderByAggregateInput = {
-    contact?: SortOrder
     age?: SortOrder
     passing_year?: SortOrder
     experience?: SortOrder
@@ -3607,10 +3602,19 @@ export namespace Prisma {
   }
 
   export type ProfileSumOrderByAggregateInput = {
-    contact?: SortOrder
     age?: SortOrder
     passing_year?: SortOrder
     experience?: SortOrder
+  }
+
+  export type EnumGenderWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    not?: NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGenderFilter<$PrismaModel>
+    _max?: NestedEnumGenderFilter<$PrismaModel>
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -3627,16 +3631,6 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type EnumGenderWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
-    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    not?: NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumGenderFilter<$PrismaModel>
-    _max?: NestedEnumGenderFilter<$PrismaModel>
   }
 
   export type EnumStudentTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -3695,16 +3689,16 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type EnumGenderFieldUpdateOperationsInput = {
+    set?: $Enums.Gender
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type EnumGenderFieldUpdateOperationsInput = {
-    set?: $Enums.Gender
   }
 
   export type EnumStudentTypeFieldUpdateOperationsInput = {
@@ -3800,6 +3794,16 @@ export namespace Prisma {
     not?: NestedEnumStudentTypeFilter<$PrismaModel> | $Enums.StudentType
   }
 
+  export type NestedEnumGenderWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    not?: NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGenderFilter<$PrismaModel>
+    _max?: NestedEnumGenderFilter<$PrismaModel>
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -3827,16 +3831,6 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedEnumGenderWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
-    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    not?: NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumGenderFilter<$PrismaModel>
-    _max?: NestedEnumGenderFilter<$PrismaModel>
-  }
-
   export type NestedEnumStudentTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StudentType | EnumStudentTypeFieldRefInput<$PrismaModel>
     in?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel>
@@ -3849,7 +3843,7 @@ export namespace Prisma {
 
   export type ProfileCreateWithoutUserInput = {
     id?: string
-    contact: number
+    contact: string
     city: string
     gender: $Enums.Gender
     age: number
@@ -3862,7 +3856,7 @@ export namespace Prisma {
 
   export type ProfileUncheckedCreateWithoutUserInput = {
     id?: string
-    contact: number
+    contact: string
     city: string
     gender: $Enums.Gender
     age: number
@@ -3890,7 +3884,7 @@ export namespace Prisma {
   }
 
   export type ProfileUpdateWithoutUserInput = {
-    contact?: IntFieldUpdateOperationsInput | number
+    contact?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     age?: IntFieldUpdateOperationsInput | number
@@ -3902,7 +3896,7 @@ export namespace Prisma {
   }
 
   export type ProfileUncheckedUpdateWithoutUserInput = {
-    contact?: IntFieldUpdateOperationsInput | number
+    contact?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     age?: IntFieldUpdateOperationsInput | number

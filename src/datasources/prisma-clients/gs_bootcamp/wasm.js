@@ -152,9 +152,9 @@ exports.Gender = exports.$Enums.Gender = {
 };
 
 exports.StudentType = exports.$Enums.StudentType = {
-  College_Student: 'College_Student',
+  CollegeStudent: 'CollegeStudent',
   Fresher: 'Fresher',
-  Working_Professional: 'Working_Professional',
+  WorkingProfessional: 'WorkingProfessional',
   Woman_Returning_to_work: 'Woman_Returning_to_work'
 };
 
