@@ -22,7 +22,7 @@ model User {
 
 model Profile {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  contact       String
+  contact       Int
   city          String
   gender        Gender
   age           Int
