@@ -17,7 +17,7 @@ http.get./gs_bootcamp/user/{id}:
             type: object
 
 # CREATE
-http.post./gs_bootcamp/user:
+http.post./gs_bootcamp/user/signup:
   summary: Create a new User
   description: Create User from database
   fn: com.biz.gs_bootcamp.user.create

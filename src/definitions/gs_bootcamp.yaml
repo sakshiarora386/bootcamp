@@ -1,5 +1,8 @@
 User:
   type: object
+  required: [email, password, first_name]
+  additionalProperties: false
+
   properties:
     email:
       type: string
@@ -18,11 +21,13 @@ User:
     updatedAt:
       type: string
       format: date-time
+
 Profile:
   type: object
   properties:
     contact:
-      type: integer
+      type: string
+      pattern: "^[0-9]{10}$"
     city:
       type: string
     gender:
@@ -31,16 +36,20 @@ Profile:
         - Male
         - Female
         - Other
+        - male
+        - female
+        - other
+
     age:
       type: integer
       minimum: 18
     type:
       type: string
       enum:
-        - College_Student
+        - College student
         - Fresher
-        - Working_Professional
-        - Woman_Returning_to_work
+        - Working professional
+        - Woman returning to work
     college:
       type: string
     course_passed:
