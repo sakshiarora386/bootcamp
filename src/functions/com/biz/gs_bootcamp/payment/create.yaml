@@ -1,0 +1,6 @@
+summary: Create Payment
+tasks:
+  - id: gs_bootcamp_payment_create
+    fn: datasource.gs_bootcamp.Payment.create
+    args:
+      data: <% inputs.body %>

@@ -1,0 +1,7 @@
+summary: Fetch Bookings
+tasks:
+  - id: gs_bootcamp_bookings_one
+    fn: datasource.gs_bootcamp.Bookings.findUnique
+    args:
+      where:
+        booking_id: <% parseInt(inputs.params.booking_id) %>

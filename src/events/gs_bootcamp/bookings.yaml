@@ -1,0 +1,93 @@
+# ONE
+http.get./gs_bootcamp/bookings/{booking_id}:
+  summary: Fetch Bookings
+  description: Fetch Bookings from database
+  fn: com.biz.gs_bootcamp.bookings.one
+  params:
+    - name: booking_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# CREATE
+http.post./gs_bootcamp/bookings:
+  summary: Create a new Bookings
+  description: Create Bookings from database
+  fn: com.biz.gs_bootcamp.bookings.create
+  body:
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/gs_bootcamp/Bookings'
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# UPDATE
+http.put./gs_bootcamp/bookings/{booking_id}:
+  summary: Update a Bookings
+  description: Update Bookings from database
+  fn: com.biz.gs_bootcamp.bookings.update
+  body:
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/gs_bootcamp/Bookings'
+  params:
+    - name: booking_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# DELETE
+http.delete./gs_bootcamp/bookings/{booking_id}:
+  summary: Delete a Bookings
+  description: Delete Bookings from database
+  fn: com.biz.gs_bootcamp.bookings.delete
+  params:
+    - name: booking_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '202':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# SEARCH
+http.post./gs_bootcamp/bookings/search:
+  summary: Fetch multiple Bookings
+  description: Fetch multiple Bookings from database
+  fn: com.biz.gs_bootcamp.bookings.search
+  body:
+    content:
+      application/json:
+        schema:
+          type: object
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: array
+

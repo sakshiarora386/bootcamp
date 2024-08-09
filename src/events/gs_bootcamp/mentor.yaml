@@ -1,0 +1,93 @@
+# ONE
+http.get./gs_bootcamp/mentor/{mentor_id}:
+  summary: Fetch Mentor
+  description: Fetch Mentor from database
+  fn: com.biz.gs_bootcamp.mentor.one
+  params:
+    - name: mentor_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# CREATE
+http.post./gs_bootcamp/mentor:
+  summary: Create a new Mentor
+  description: Create Mentor from database
+  fn: com.biz.gs_bootcamp.mentor.create
+  body:
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/gs_bootcamp/Mentor'
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# UPDATE
+http.put./gs_bootcamp/mentor/{mentor_id}:
+  summary: Update a Mentor
+  description: Update Mentor from database
+  fn: com.biz.gs_bootcamp.mentor.update
+  body:
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/gs_bootcamp/Mentor'
+  params:
+    - name: mentor_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# DELETE
+http.delete./gs_bootcamp/mentor/{mentor_id}:
+  summary: Delete a Mentor
+  description: Delete Mentor from database
+  fn: com.biz.gs_bootcamp.mentor.delete
+  params:
+    - name: mentor_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '202':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# SEARCH
+http.post./gs_bootcamp/mentor/search:
+  summary: Fetch multiple Mentor
+  description: Fetch multiple Mentor from database
+  fn: com.biz.gs_bootcamp.mentor.search
+  body:
+    content:
+      application/json:
+        schema:
+          type: object
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: array
+

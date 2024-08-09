@@ -1,0 +1,6 @@
+summary: Create Bookings
+tasks:
+  - id: gs_bootcamp_bookings_create
+    fn: datasource.gs_bootcamp.Bookings.create
+    args:
+      data: <% inputs.body %>

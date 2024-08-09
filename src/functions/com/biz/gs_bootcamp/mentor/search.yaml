@@ -1,0 +1,5 @@
+summary: Fetch many Mentor
+tasks:
+  - id: gs_bootcamp_mentor_search
+    fn: datasource.gs_bootcamp.Mentor.findMany
+    args: {}

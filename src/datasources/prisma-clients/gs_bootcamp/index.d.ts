@@ -19,42 +19,25 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
- * Model Profile
+ * Model Bootcamp
  * 
  */
-export type Profile = $Result.DefaultSelection<Prisma.$ProfilePayload>
-
+export type Bootcamp = $Result.DefaultSelection<Prisma.$BootcampPayload>
 /**
- * Enums
+ * Model Mentor
+ * 
  */
-export namespace $Enums {
-  export const Gender: {
-  Male: 'Male',
-  Female: 'Female',
-  Other: 'Other'
-};
-
-export type Gender = (typeof Gender)[keyof typeof Gender]
-
-
-export const StudentType: {
-  CollegeStudent: 'CollegeStudent',
-  Fresher: 'Fresher',
-  WorkingProfessional: 'WorkingProfessional',
-  Woman_Returning_to_work: 'Woman_Returning_to_work'
-};
-
-export type StudentType = (typeof StudentType)[keyof typeof StudentType]
-
-}
-
-export type Gender = $Enums.Gender
-
-export const Gender: typeof $Enums.Gender
-
-export type StudentType = $Enums.StudentType
-
-export const StudentType: typeof $Enums.StudentType
+export type Mentor = $Result.DefaultSelection<Prisma.$MentorPayload>
+/**
+ * Model Bookings
+ * 
+ */
+export type Bookings = $Result.DefaultSelection<Prisma.$BookingsPayload>
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = $Result.DefaultSelection<Prisma.$PaymentPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -113,6 +96,52 @@ export class PrismaClient<
   $use(cb: Prisma.Middleware): void
 
 /**
+   * Executes a prepared raw query and returns the number of affected rows.
+   * @example
+   * ```
+   * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
+   * ```
+   * 
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   */
+  $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
+
+  /**
+   * Executes a raw query and returns the number of affected rows.
+   * Susceptible to SQL injections, see documentation.
+   * @example
+   * ```
+   * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
+   * ```
+   * 
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   */
+  $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
+
+  /**
+   * Performs a prepared raw query and returns the `SELECT` data.
+   * @example
+   * ```
+   * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
+   * ```
+   * 
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   */
+  $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
+
+  /**
+   * Performs a raw query and returns the `SELECT` data.
+   * Susceptible to SQL injections, see documentation.
+   * @example
+   * ```
+   * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
+   * ```
+   * 
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   */
+  $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
+
+  /**
    * Allows the running of a sequence of read/write operations that are guaranteed to either succeed or fail as a whole.
    * @example
    * ```
@@ -125,24 +154,10 @@ export class PrismaClient<
    * 
    * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
    */
-  $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P]): $Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
+  $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
 
-  $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => $Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number }): $Utils.JsPromise<R>
+  $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => $Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<R>
 
-  /**
-   * Executes a raw MongoDB command and returns the result of it.
-   * @example
-   * ```
-   * const user = await prisma.$runCommandRaw({
-   *   aggregate: 'User',
-   *   pipeline: [{ $match: { name: 'Bob' } }, { $project: { email: true, _id: false } }],
-   *   explain: false,
-   * })
-   * ```
-   * 
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
-   */
-  $runCommandRaw(command: Prisma.InputJsonObject): Prisma.PrismaPromise<Prisma.JsonObject>
 
   /**
    * Gives access to the client metrics in json or prometheus format.
@@ -168,14 +183,44 @@ export class PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs>;
 
   /**
-   * `prisma.profile`: Exposes CRUD operations for the **Profile** model.
+   * `prisma.bootcamp`: Exposes CRUD operations for the **Bootcamp** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Profiles
-    * const profiles = await prisma.profile.findMany()
+    * // Fetch zero or more Bootcamps
+    * const bootcamps = await prisma.bootcamp.findMany()
     * ```
     */
-  get profile(): Prisma.ProfileDelegate<ExtArgs>;
+  get bootcamp(): Prisma.BootcampDelegate<ExtArgs>;
+
+  /**
+   * `prisma.mentor`: Exposes CRUD operations for the **Mentor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mentors
+    * const mentors = await prisma.mentor.findMany()
+    * ```
+    */
+  get mentor(): Prisma.MentorDelegate<ExtArgs>;
+
+  /**
+   * `prisma.bookings`: Exposes CRUD operations for the **Bookings** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Bookings
+    * const bookings = await prisma.bookings.findMany()
+    * ```
+    */
+  get bookings(): Prisma.BookingsDelegate<ExtArgs>;
+
+  /**
+   * `prisma.payment`: Exposes CRUD operations for the **Payment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Payments
+    * const payments = await prisma.payment.findMany()
+    * ```
+    */
+  get payment(): Prisma.PaymentDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -654,7 +699,10 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
-    Profile: 'Profile'
+    Bootcamp: 'Bootcamp',
+    Mentor: 'Mentor',
+    Bookings: 'Bookings',
+    Payment: 'Payment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -670,8 +718,8 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "profile"
-      txIsolationLevel: never
+      modelProps: "user" | "bootcamp" | "mentor" | "bookings" | "payment"
+      txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
       User: {
@@ -706,6 +754,10 @@ export namespace Prisma {
             args: Prisma.UserCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
+          }
           delete: {
             args: Prisma.UserDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$UserPayload>
@@ -734,91 +786,289 @@ export namespace Prisma {
             args: Prisma.UserGroupByArgs<ExtArgs>
             result: $Utils.Optional<UserGroupByOutputType>[]
           }
-          findRaw: {
-            args: Prisma.UserFindRawArgs<ExtArgs>
-            result: JsonObject
-          }
-          aggregateRaw: {
-            args: Prisma.UserAggregateRawArgs<ExtArgs>
-            result: JsonObject
-          }
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
           }
         }
       }
-      Profile: {
-        payload: Prisma.$ProfilePayload<ExtArgs>
-        fields: Prisma.ProfileFieldRefs
+      Bootcamp: {
+        payload: Prisma.$BootcampPayload<ExtArgs>
+        fields: Prisma.BootcampFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.ProfileFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProfilePayload> | null
+            args: Prisma.BootcampFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BootcampPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.ProfileFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+            args: Prisma.BootcampFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BootcampPayload>
           }
           findFirst: {
-            args: Prisma.ProfileFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProfilePayload> | null
+            args: Prisma.BootcampFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BootcampPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.ProfileFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+            args: Prisma.BootcampFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BootcampPayload>
           }
           findMany: {
-            args: Prisma.ProfileFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>[]
+            args: Prisma.BootcampFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BootcampPayload>[]
           }
           create: {
-            args: Prisma.ProfileCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+            args: Prisma.BootcampCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BootcampPayload>
           }
           createMany: {
-            args: Prisma.ProfileCreateManyArgs<ExtArgs>
+            args: Prisma.BootcampCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.BootcampCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BootcampPayload>[]
+          }
           delete: {
-            args: Prisma.ProfileDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+            args: Prisma.BootcampDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BootcampPayload>
           }
           update: {
-            args: Prisma.ProfileUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+            args: Prisma.BootcampUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BootcampPayload>
           }
           deleteMany: {
-            args: Prisma.ProfileDeleteManyArgs<ExtArgs>
+            args: Prisma.BootcampDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.ProfileUpdateManyArgs<ExtArgs>
+            args: Prisma.BootcampUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.ProfileUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+            args: Prisma.BootcampUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BootcampPayload>
           }
           aggregate: {
-            args: Prisma.ProfileAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateProfile>
+            args: Prisma.BootcampAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBootcamp>
           }
           groupBy: {
-            args: Prisma.ProfileGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ProfileGroupByOutputType>[]
-          }
-          findRaw: {
-            args: Prisma.ProfileFindRawArgs<ExtArgs>
-            result: JsonObject
-          }
-          aggregateRaw: {
-            args: Prisma.ProfileAggregateRawArgs<ExtArgs>
-            result: JsonObject
+            args: Prisma.BootcampGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BootcampGroupByOutputType>[]
           }
           count: {
-            args: Prisma.ProfileCountArgs<ExtArgs>
-            result: $Utils.Optional<ProfileCountAggregateOutputType> | number
+            args: Prisma.BootcampCountArgs<ExtArgs>
+            result: $Utils.Optional<BootcampCountAggregateOutputType> | number
+          }
+        }
+      }
+      Mentor: {
+        payload: Prisma.$MentorPayload<ExtArgs>
+        fields: Prisma.MentorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MentorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MentorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MentorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MentorPayload>
+          }
+          findFirst: {
+            args: Prisma.MentorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MentorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MentorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MentorPayload>
+          }
+          findMany: {
+            args: Prisma.MentorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MentorPayload>[]
+          }
+          create: {
+            args: Prisma.MentorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MentorPayload>
+          }
+          createMany: {
+            args: Prisma.MentorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MentorCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MentorPayload>[]
+          }
+          delete: {
+            args: Prisma.MentorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MentorPayload>
+          }
+          update: {
+            args: Prisma.MentorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MentorPayload>
+          }
+          deleteMany: {
+            args: Prisma.MentorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MentorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MentorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MentorPayload>
+          }
+          aggregate: {
+            args: Prisma.MentorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMentor>
+          }
+          groupBy: {
+            args: Prisma.MentorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MentorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MentorCountArgs<ExtArgs>
+            result: $Utils.Optional<MentorCountAggregateOutputType> | number
+          }
+        }
+      }
+      Bookings: {
+        payload: Prisma.$BookingsPayload<ExtArgs>
+        fields: Prisma.BookingsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BookingsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BookingsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingsPayload>
+          }
+          findFirst: {
+            args: Prisma.BookingsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BookingsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingsPayload>
+          }
+          findMany: {
+            args: Prisma.BookingsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingsPayload>[]
+          }
+          create: {
+            args: Prisma.BookingsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingsPayload>
+          }
+          createMany: {
+            args: Prisma.BookingsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BookingsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingsPayload>[]
+          }
+          delete: {
+            args: Prisma.BookingsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingsPayload>
+          }
+          update: {
+            args: Prisma.BookingsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingsPayload>
+          }
+          deleteMany: {
+            args: Prisma.BookingsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BookingsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.BookingsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingsPayload>
+          }
+          aggregate: {
+            args: Prisma.BookingsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBookings>
+          }
+          groupBy: {
+            args: Prisma.BookingsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BookingsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BookingsCountArgs<ExtArgs>
+            result: $Utils.Optional<BookingsCountAggregateOutputType> | number
+          }
+        }
+      }
+      Payment: {
+        payload: Prisma.$PaymentPayload<ExtArgs>
+        fields: Prisma.PaymentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PaymentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PaymentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          findFirst: {
+            args: Prisma.PaymentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PaymentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          findMany: {
+            args: Prisma.PaymentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>[]
+          }
+          create: {
+            args: Prisma.PaymentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          createMany: {
+            args: Prisma.PaymentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PaymentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>[]
+          }
+          delete: {
+            args: Prisma.PaymentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          update: {
+            args: Prisma.PaymentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          deleteMany: {
+            args: Prisma.PaymentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PaymentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PaymentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          aggregate: {
+            args: Prisma.PaymentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePayment>
+          }
+          groupBy: {
+            args: Prisma.PaymentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PaymentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PaymentCountArgs<ExtArgs>
+            result: $Utils.Optional<PaymentCountAggregateOutputType> | number
           }
         }
       }
@@ -827,9 +1077,21 @@ export namespace Prisma {
     other: {
       payload: any
       operations: {
-        $runCommandRaw: {
-          args: Prisma.InputJsonObject,
-          result: Prisma.JsonObject
+        $executeRawUnsafe: {
+          args: [query: string, ...values: any[]],
+          result: any
+        }
+        $executeRaw: {
+          args: [query: TemplateStringsArray | Prisma.Sql, ...values: any[]],
+          result: any
+        }
+        $queryRawUnsafe: {
+          args: [query: string, ...values: any[]],
+          result: any
+        }
+        $queryRaw: {
+          args: [query: TemplateStringsArray | Prisma.Sql, ...values: any[]],
+          result: any
         }
       }
     }
@@ -875,6 +1137,7 @@ export namespace Prisma {
     transactionOptions?: {
       maxWait?: number
       timeout?: number
+      isolationLevel?: Prisma.TransactionIsolationLevel
     }
   }
 
@@ -965,6 +1228,98 @@ export namespace Prisma {
    */
 
 
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    bookings: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bookings?: boolean | UserCountOutputTypeCountBookingsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBookingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingsWhereInput
+  }
+
+
+  /**
+   * Count Type BootcampCountOutputType
+   */
+
+  export type BootcampCountOutputType = {
+    bookings: number
+  }
+
+  export type BootcampCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bookings?: boolean | BootcampCountOutputTypeCountBookingsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BootcampCountOutputType without action
+   */
+  export type BootcampCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BootcampCountOutputType
+     */
+    select?: BootcampCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BootcampCountOutputType without action
+   */
+  export type BootcampCountOutputTypeCountBookingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingsWhereInput
+  }
+
+
+  /**
+   * Count Type BookingsCountOutputType
+   */
+
+  export type BookingsCountOutputType = {
+    payment: number
+  }
+
+  export type BookingsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payment?: boolean | BookingsCountOutputTypeCountPaymentArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BookingsCountOutputType without action
+   */
+  export type BookingsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingsCountOutputType
+     */
+    select?: BookingsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BookingsCountOutputType without action
+   */
+  export type BookingsCountOutputTypeCountPaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PaymentWhereInput
+  }
+
 
   /**
    * Models
@@ -976,70 +1331,78 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
 
+  export type UserAvgAggregateOutputType = {
+    user_id: number | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    user_id: number | null
+  }
+
   export type UserMinAggregateOutputType = {
-    id: string | null
+    user_id: number | null
     email: string | null
-    first_name: string | null
-    last_name: string | null
-    password: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    passwordHash: string | null
+    githubId: string | null
+    verified: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
-    id: string | null
+    user_id: number | null
     email: string | null
-    first_name: string | null
-    last_name: string | null
-    password: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    passwordHash: string | null
+    githubId: string | null
+    verified: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
-    id: number
+    user_id: number
     email: number
-    first_name: number
-    last_name: number
-    password: number
-    createdAt: number
-    updatedAt: number
+    passwordHash: number
+    githubId: number
+    verified: number
+    personalInfo: number
     _all: number
   }
 
 
+  export type UserAvgAggregateInputType = {
+    user_id?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    user_id?: true
+  }
+
   export type UserMinAggregateInputType = {
-    id?: true
+    user_id?: true
     email?: true
-    first_name?: true
-    last_name?: true
-    password?: true
-    createdAt?: true
-    updatedAt?: true
+    passwordHash?: true
+    githubId?: true
+    verified?: true
   }
 
   export type UserMaxAggregateInputType = {
-    id?: true
+    user_id?: true
     email?: true
-    first_name?: true
-    last_name?: true
-    password?: true
-    createdAt?: true
-    updatedAt?: true
+    passwordHash?: true
+    githubId?: true
+    verified?: true
   }
 
   export type UserCountAggregateInputType = {
-    id?: true
+    user_id?: true
     email?: true
-    first_name?: true
-    last_name?: true
-    password?: true
-    createdAt?: true
-    updatedAt?: true
+    passwordHash?: true
+    githubId?: true
+    verified?: true
+    personalInfo?: true
     _all?: true
   }
 
@@ -1081,6 +1444,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1111,19 +1486,22 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
 
   export type UserGroupByOutputType = {
-    id: string
+    user_id: number
     email: string
-    first_name: string
-    last_name: string
-    password: string
-    createdAt: Date
-    updatedAt: Date
+    passwordHash: string
+    githubId: string | null
+    verified: boolean
+    personalInfo: JsonValue | null
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -1143,44 +1521,52 @@ export namespace Prisma {
 
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
+    user_id?: boolean
     email?: boolean
-    first_name?: boolean
-    last_name?: boolean
-    password?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    profile?: boolean | User$profileArgs<ExtArgs>
+    passwordHash?: boolean
+    githubId?: boolean
+    verified?: boolean
+    personalInfo?: boolean
+    bookings?: boolean | User$bookingsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
+  export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    user_id?: boolean
+    email?: boolean
+    passwordHash?: boolean
+    githubId?: boolean
+    verified?: boolean
+    personalInfo?: boolean
+  }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
-    id?: boolean
+    user_id?: boolean
     email?: boolean
-    first_name?: boolean
-    last_name?: boolean
-    password?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
+    passwordHash?: boolean
+    githubId?: boolean
+    verified?: boolean
+    personalInfo?: boolean
   }
 
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    profile?: boolean | User$profileArgs<ExtArgs>
+    bookings?: boolean | User$bookingsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      profile: Prisma.$ProfilePayload<ExtArgs> | null
+      bookings: Prisma.$BookingsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      user_id: number
       email: string
-      first_name: string
-      last_name: string
-      password: string
-      createdAt: Date
-      updatedAt: Date
+      passwordHash: string
+      githubId: string | null
+      verified: boolean
+      personalInfo: Prisma.JsonValue | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -1264,8 +1650,8 @@ export namespace Prisma {
      * // Get first 10 Users
      * const users = await prisma.user.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
+     * // Only select the `user_id`
+     * const userWithUser_idOnly = await prisma.user.findMany({ select: { user_id: true } })
      * 
      */
     findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany">>
@@ -1297,6 +1683,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends UserCreateManyArgs>(args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Users and returns the data saved in the database.
+     * @param {UserCreateManyAndReturnArgs} args - Arguments to create many Users.
+     * @example
+     * // Create many Users
+     * const user = await prisma.user.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Users and only return the `user_id`
+     * const userWithUser_idOnly = await prisma.user.createManyAndReturn({ 
+     *   select: { user_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a User.
@@ -1380,29 +1790,6 @@ export namespace Prisma {
      * })
      */
     upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-    /**
-     * Find zero or more Users that matches the filter.
-     * @param {UserFindRawArgs} args - Select which filters you would like to apply.
-     * @example
-     * const user = await prisma.user.findRaw({
-     *   filter: { age: { $gt: 25 } } 
-     * })
-     */
-    findRaw(args?: UserFindRawArgs): Prisma.PrismaPromise<JsonObject>
-
-    /**
-     * Perform aggregation operations on a User.
-     * @param {UserAggregateRawArgs} args - Select which aggregations you would like to apply.
-     * @example
-     * const user = await prisma.user.aggregateRaw({
-     *   pipeline: [
-     *     { $match: { status: "registered" } },
-     *     { $group: { _id: "$country", total: { $sum: 1 } } }
-     *   ]
-     * })
-     */
-    aggregateRaw(args?: UserAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
 
 
     /**
@@ -1544,7 +1931,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    profile<T extends User$profileArgs<ExtArgs> = {}>(args?: Subset<T, User$profileArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    bookings<T extends User$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, User$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1574,13 +1961,12 @@ export namespace Prisma {
    * Fields of the User model
    */ 
   interface UserFieldRefs {
-    readonly id: FieldRef<"User", 'String'>
+    readonly user_id: FieldRef<"User", 'Int'>
     readonly email: FieldRef<"User", 'String'>
-    readonly first_name: FieldRef<"User", 'String'>
-    readonly last_name: FieldRef<"User", 'String'>
-    readonly password: FieldRef<"User", 'String'>
-    readonly createdAt: FieldRef<"User", 'DateTime'>
-    readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly passwordHash: FieldRef<"User", 'String'>
+    readonly githubId: FieldRef<"User", 'String'>
+    readonly verified: FieldRef<"User", 'Boolean'>
+    readonly personalInfo: FieldRef<"User", 'Json'>
   }
     
 
@@ -1786,6 +2172,22 @@ export namespace Prisma {
      * The data used to create many Users.
      */
     data: UserCreateManyInput | UserCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * User createManyAndReturn
+   */
+  export type UserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Users.
+     */
+    data: UserCreateManyInput | UserCreateManyInput[]
+    skipDuplicates?: boolean
   }
 
   /**
@@ -1879,46 +2281,23 @@ export namespace Prisma {
   }
 
   /**
-   * User findRaw
+   * User.bookings
    */
-  export type UserFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$bookingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     * Select specific fields to fetch from the Bookings
      */
-    filter?: InputJsonValue
-    /**
-     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
-     */
-    options?: InputJsonValue
-  }
-
-  /**
-   * User aggregateRaw
-   */
-  export type UserAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
-     */
-    pipeline?: InputJsonValue[]
-    /**
-     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
-     */
-    options?: InputJsonValue
-  }
-
-  /**
-   * User.profile
-   */
-  export type User$profileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Profile
-     */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BookingsSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
-    where?: ProfileWhereInput
+    include?: BookingsInclude<ExtArgs> | null
+    where?: BookingsWhereInput
+    orderBy?: BookingsOrderByWithRelationInput | BookingsOrderByWithRelationInput[]
+    cursor?: BookingsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookingsScalarFieldEnum | BookingsScalarFieldEnum[]
   }
 
   /**
@@ -1937,468 +2316,419 @@ export namespace Prisma {
 
 
   /**
-   * Model Profile
+   * Model Bootcamp
    */
 
-  export type AggregateProfile = {
-    _count: ProfileCountAggregateOutputType | null
-    _avg: ProfileAvgAggregateOutputType | null
-    _sum: ProfileSumAggregateOutputType | null
-    _min: ProfileMinAggregateOutputType | null
-    _max: ProfileMaxAggregateOutputType | null
+  export type AggregateBootcamp = {
+    _count: BootcampCountAggregateOutputType | null
+    _avg: BootcampAvgAggregateOutputType | null
+    _sum: BootcampSumAggregateOutputType | null
+    _min: BootcampMinAggregateOutputType | null
+    _max: BootcampMaxAggregateOutputType | null
   }
 
-  export type ProfileAvgAggregateOutputType = {
-    age: number | null
-    passing_year: number | null
-    experience: number | null
+  export type BootcampAvgAggregateOutputType = {
+    bootcamp_id: number | null
+    amount: number | null
   }
 
-  export type ProfileSumAggregateOutputType = {
-    age: number | null
-    passing_year: number | null
-    experience: number | null
+  export type BootcampSumAggregateOutputType = {
+    bootcamp_id: number | null
+    amount: number | null
   }
 
-  export type ProfileMinAggregateOutputType = {
-    id: string | null
-    contact: string | null
-    city: string | null
-    gender: $Enums.Gender | null
-    age: number | null
-    type: $Enums.StudentType | null
-    college: string | null
-    course_passed: string | null
-    passing_year: number | null
-    experience: number | null
-    userId: string | null
+  export type BootcampMinAggregateOutputType = {
+    bootcamp_id: number | null
+    name: string | null
+    description: string | null
+    amount: number | null
+    mentors: string | null
   }
 
-  export type ProfileMaxAggregateOutputType = {
-    id: string | null
-    contact: string | null
-    city: string | null
-    gender: $Enums.Gender | null
-    age: number | null
-    type: $Enums.StudentType | null
-    college: string | null
-    course_passed: string | null
-    passing_year: number | null
-    experience: number | null
-    userId: string | null
+  export type BootcampMaxAggregateOutputType = {
+    bootcamp_id: number | null
+    name: string | null
+    description: string | null
+    amount: number | null
+    mentors: string | null
   }
 
-  export type ProfileCountAggregateOutputType = {
-    id: number
-    contact: number
-    city: number
-    gender: number
-    age: number
-    type: number
-    college: number
-    course_passed: number
-    passing_year: number
-    experience: number
-    userId: number
+  export type BootcampCountAggregateOutputType = {
+    bootcamp_id: number
+    name: number
+    description: number
+    schedule: number
+    dates: number
+    amount: number
+    mentors: number
     _all: number
   }
 
 
-  export type ProfileAvgAggregateInputType = {
-    age?: true
-    passing_year?: true
-    experience?: true
+  export type BootcampAvgAggregateInputType = {
+    bootcamp_id?: true
+    amount?: true
   }
 
-  export type ProfileSumAggregateInputType = {
-    age?: true
-    passing_year?: true
-    experience?: true
+  export type BootcampSumAggregateInputType = {
+    bootcamp_id?: true
+    amount?: true
   }
 
-  export type ProfileMinAggregateInputType = {
-    id?: true
-    contact?: true
-    city?: true
-    gender?: true
-    age?: true
-    type?: true
-    college?: true
-    course_passed?: true
-    passing_year?: true
-    experience?: true
-    userId?: true
+  export type BootcampMinAggregateInputType = {
+    bootcamp_id?: true
+    name?: true
+    description?: true
+    amount?: true
+    mentors?: true
   }
 
-  export type ProfileMaxAggregateInputType = {
-    id?: true
-    contact?: true
-    city?: true
-    gender?: true
-    age?: true
-    type?: true
-    college?: true
-    course_passed?: true
-    passing_year?: true
-    experience?: true
-    userId?: true
+  export type BootcampMaxAggregateInputType = {
+    bootcamp_id?: true
+    name?: true
+    description?: true
+    amount?: true
+    mentors?: true
   }
 
-  export type ProfileCountAggregateInputType = {
-    id?: true
-    contact?: true
-    city?: true
-    gender?: true
-    age?: true
-    type?: true
-    college?: true
-    course_passed?: true
-    passing_year?: true
-    experience?: true
-    userId?: true
+  export type BootcampCountAggregateInputType = {
+    bootcamp_id?: true
+    name?: true
+    description?: true
+    schedule?: true
+    dates?: true
+    amount?: true
+    mentors?: true
     _all?: true
   }
 
-  export type ProfileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Profile to aggregate.
+     * Filter which Bootcamp to aggregate.
      */
-    where?: ProfileWhereInput
+    where?: BootcampWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Profiles to fetch.
+     * Determine the order of Bootcamps to fetch.
      */
-    orderBy?: ProfileOrderByWithRelationInput | ProfileOrderByWithRelationInput[]
+    orderBy?: BootcampOrderByWithRelationInput | BootcampOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ProfileWhereUniqueInput
+    cursor?: BootcampWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Profiles from the position of the cursor.
+     * Take `±n` Bootcamps from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Profiles.
+     * Skip the first `n` Bootcamps.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Profiles
+     * Count returned Bootcamps
     **/
-    _count?: true | ProfileCountAggregateInputType
+    _count?: true | BootcampCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: ProfileAvgAggregateInputType
+    _avg?: BootcampAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: ProfileSumAggregateInputType
+    _sum?: BootcampSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ProfileMinAggregateInputType
+    _min?: BootcampMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ProfileMaxAggregateInputType
+    _max?: BootcampMaxAggregateInputType
   }
 
-  export type GetProfileAggregateType<T extends ProfileAggregateArgs> = {
-        [P in keyof T & keyof AggregateProfile]: P extends '_count' | 'count'
+  export type GetBootcampAggregateType<T extends BootcampAggregateArgs> = {
+        [P in keyof T & keyof AggregateBootcamp]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateProfile[P]>
-      : GetScalarType<T[P], AggregateProfile[P]>
+        : GetScalarType<T[P], AggregateBootcamp[P]>
+      : GetScalarType<T[P], AggregateBootcamp[P]>
   }
 
 
 
 
-  export type ProfileGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProfileWhereInput
-    orderBy?: ProfileOrderByWithAggregationInput | ProfileOrderByWithAggregationInput[]
-    by: ProfileScalarFieldEnum[] | ProfileScalarFieldEnum
-    having?: ProfileScalarWhereWithAggregatesInput
+  export type BootcampGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BootcampWhereInput
+    orderBy?: BootcampOrderByWithAggregationInput | BootcampOrderByWithAggregationInput[]
+    by: BootcampScalarFieldEnum[] | BootcampScalarFieldEnum
+    having?: BootcampScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ProfileCountAggregateInputType | true
-    _avg?: ProfileAvgAggregateInputType
-    _sum?: ProfileSumAggregateInputType
-    _min?: ProfileMinAggregateInputType
-    _max?: ProfileMaxAggregateInputType
+    _count?: BootcampCountAggregateInputType | true
+    _avg?: BootcampAvgAggregateInputType
+    _sum?: BootcampSumAggregateInputType
+    _min?: BootcampMinAggregateInputType
+    _max?: BootcampMaxAggregateInputType
   }
 
-  export type ProfileGroupByOutputType = {
-    id: string
-    contact: string
-    city: string
-    gender: $Enums.Gender
-    age: number
-    type: $Enums.StudentType
-    college: string
-    course_passed: string
-    passing_year: number
-    experience: number
-    userId: string
-    _count: ProfileCountAggregateOutputType | null
-    _avg: ProfileAvgAggregateOutputType | null
-    _sum: ProfileSumAggregateOutputType | null
-    _min: ProfileMinAggregateOutputType | null
-    _max: ProfileMaxAggregateOutputType | null
+  export type BootcampGroupByOutputType = {
+    bootcamp_id: number
+    name: string
+    description: string | null
+    schedule: JsonValue
+    dates: Date[]
+    amount: number
+    mentors: string
+    _count: BootcampCountAggregateOutputType | null
+    _avg: BootcampAvgAggregateOutputType | null
+    _sum: BootcampSumAggregateOutputType | null
+    _min: BootcampMinAggregateOutputType | null
+    _max: BootcampMaxAggregateOutputType | null
   }
 
-  type GetProfileGroupByPayload<T extends ProfileGroupByArgs> = Prisma.PrismaPromise<
+  type GetBootcampGroupByPayload<T extends BootcampGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<ProfileGroupByOutputType, T['by']> &
+      PickEnumerable<BootcampGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ProfileGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof BootcampGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ProfileGroupByOutputType[P]>
-            : GetScalarType<T[P], ProfileGroupByOutputType[P]>
+              : GetScalarType<T[P], BootcampGroupByOutputType[P]>
+            : GetScalarType<T[P], BootcampGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    contact?: boolean
-    city?: boolean
-    gender?: boolean
-    age?: boolean
-    type?: boolean
-    college?: boolean
-    course_passed?: boolean
-    passing_year?: boolean
-    experience?: boolean
-    userId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["profile"]>
+  export type BootcampSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    bootcamp_id?: boolean
+    name?: boolean
+    description?: boolean
+    schedule?: boolean
+    dates?: boolean
+    amount?: boolean
+    mentors?: boolean
+    bookings?: boolean | Bootcamp$bookingsArgs<ExtArgs>
+    _count?: boolean | BootcampCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bootcamp"]>
 
+  export type BootcampSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    bootcamp_id?: boolean
+    name?: boolean
+    description?: boolean
+    schedule?: boolean
+    dates?: boolean
+    amount?: boolean
+    mentors?: boolean
+  }, ExtArgs["result"]["bootcamp"]>
 
-  export type ProfileSelectScalar = {
-    id?: boolean
-    contact?: boolean
-    city?: boolean
-    gender?: boolean
-    age?: boolean
-    type?: boolean
-    college?: boolean
-    course_passed?: boolean
-    passing_year?: boolean
-    experience?: boolean
-    userId?: boolean
+  export type BootcampSelectScalar = {
+    bootcamp_id?: boolean
+    name?: boolean
+    description?: boolean
+    schedule?: boolean
+    dates?: boolean
+    amount?: boolean
+    mentors?: boolean
   }
 
-  export type ProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
+  export type BootcampInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bookings?: boolean | Bootcamp$bookingsArgs<ExtArgs>
+    _count?: boolean | BootcampCountOutputTypeDefaultArgs<ExtArgs>
   }
+  export type BootcampIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
-  export type $ProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Profile"
+  export type $BootcampPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Bootcamp"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
+      bookings: Prisma.$BookingsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
-      contact: string
-      city: string
-      gender: $Enums.Gender
-      age: number
-      type: $Enums.StudentType
-      college: string
-      course_passed: string
-      passing_year: number
-      experience: number
-      userId: string
-    }, ExtArgs["result"]["profile"]>
+      bootcamp_id: number
+      name: string
+      description: string | null
+      schedule: Prisma.JsonValue
+      dates: Date[]
+      amount: number
+      mentors: string
+    }, ExtArgs["result"]["bootcamp"]>
     composites: {}
   }
 
-  type ProfileGetPayload<S extends boolean | null | undefined | ProfileDefaultArgs> = $Result.GetResult<Prisma.$ProfilePayload, S>
+  type BootcampGetPayload<S extends boolean | null | undefined | BootcampDefaultArgs> = $Result.GetResult<Prisma.$BootcampPayload, S>
 
-  type ProfileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ProfileFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: ProfileCountAggregateInputType | true
+  type BootcampCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<BootcampFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: BootcampCountAggregateInputType | true
     }
 
-  export interface ProfileDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Profile'], meta: { name: 'Profile' } }
+  export interface BootcampDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Bootcamp'], meta: { name: 'Bootcamp' } }
     /**
-     * Find zero or one Profile that matches the filter.
-     * @param {ProfileFindUniqueArgs} args - Arguments to find a Profile
+     * Find zero or one Bootcamp that matches the filter.
+     * @param {BootcampFindUniqueArgs} args - Arguments to find a Bootcamp
      * @example
-     * // Get one Profile
-     * const profile = await prisma.profile.findUnique({
+     * // Get one Bootcamp
+     * const bootcamp = await prisma.bootcamp.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends ProfileFindUniqueArgs>(args: SelectSubset<T, ProfileFindUniqueArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends BootcampFindUniqueArgs>(args: SelectSubset<T, BootcampFindUniqueArgs<ExtArgs>>): Prisma__BootcampClient<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one Profile that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one Bootcamp that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
-     * @param {ProfileFindUniqueOrThrowArgs} args - Arguments to find a Profile
+     * @param {BootcampFindUniqueOrThrowArgs} args - Arguments to find a Bootcamp
      * @example
-     * // Get one Profile
-     * const profile = await prisma.profile.findUniqueOrThrow({
+     * // Get one Bootcamp
+     * const bootcamp = await prisma.bootcamp.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ProfileFindUniqueOrThrowArgs>(args: SelectSubset<T, ProfileFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends BootcampFindUniqueOrThrowArgs>(args: SelectSubset<T, BootcampFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BootcampClient<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
-     * Find the first Profile that matches the filter.
+     * Find the first Bootcamp that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProfileFindFirstArgs} args - Arguments to find a Profile
+     * @param {BootcampFindFirstArgs} args - Arguments to find a Bootcamp
      * @example
-     * // Get one Profile
-     * const profile = await prisma.profile.findFirst({
+     * // Get one Bootcamp
+     * const bootcamp = await prisma.bootcamp.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends ProfileFindFirstArgs>(args?: SelectSubset<T, ProfileFindFirstArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends BootcampFindFirstArgs>(args?: SelectSubset<T, BootcampFindFirstArgs<ExtArgs>>): Prisma__BootcampClient<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
-     * Find the first Profile that matches the filter or
+     * Find the first Bootcamp that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProfileFindFirstOrThrowArgs} args - Arguments to find a Profile
+     * @param {BootcampFindFirstOrThrowArgs} args - Arguments to find a Bootcamp
      * @example
-     * // Get one Profile
-     * const profile = await prisma.profile.findFirstOrThrow({
+     * // Get one Bootcamp
+     * const bootcamp = await prisma.bootcamp.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends ProfileFindFirstOrThrowArgs>(args?: SelectSubset<T, ProfileFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends BootcampFindFirstOrThrowArgs>(args?: SelectSubset<T, BootcampFindFirstOrThrowArgs<ExtArgs>>): Prisma__BootcampClient<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
-     * Find zero or more Profiles that matches the filter.
+     * Find zero or more Bootcamps that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProfileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {BootcampFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Profiles
-     * const profiles = await prisma.profile.findMany()
+     * // Get all Bootcamps
+     * const bootcamps = await prisma.bootcamp.findMany()
      * 
-     * // Get first 10 Profiles
-     * const profiles = await prisma.profile.findMany({ take: 10 })
+     * // Get first 10 Bootcamps
+     * const bootcamps = await prisma.bootcamp.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const profileWithIdOnly = await prisma.profile.findMany({ select: { id: true } })
+     * // Only select the `bootcamp_id`
+     * const bootcampWithBootcamp_idOnly = await prisma.bootcamp.findMany({ select: { bootcamp_id: true } })
      * 
      */
-    findMany<T extends ProfileFindManyArgs>(args?: SelectSubset<T, ProfileFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findMany">>
+    findMany<T extends BootcampFindManyArgs>(args?: SelectSubset<T, BootcampFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "findMany">>
 
     /**
-     * Create a Profile.
-     * @param {ProfileCreateArgs} args - Arguments to create a Profile.
+     * Create a Bootcamp.
+     * @param {BootcampCreateArgs} args - Arguments to create a Bootcamp.
      * @example
-     * // Create one Profile
-     * const Profile = await prisma.profile.create({
+     * // Create one Bootcamp
+     * const Bootcamp = await prisma.bootcamp.create({
      *   data: {
-     *     // ... data to create a Profile
+     *     // ... data to create a Bootcamp
      *   }
      * })
      * 
      */
-    create<T extends ProfileCreateArgs>(args: SelectSubset<T, ProfileCreateArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends BootcampCreateArgs>(args: SelectSubset<T, BootcampCreateArgs<ExtArgs>>): Prisma__BootcampClient<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
-     * Create many Profiles.
-     * @param {ProfileCreateManyArgs} args - Arguments to create many Profiles.
+     * Create many Bootcamps.
+     * @param {BootcampCreateManyArgs} args - Arguments to create many Bootcamps.
      * @example
-     * // Create many Profiles
-     * const profile = await prisma.profile.createMany({
+     * // Create many Bootcamps
+     * const bootcamp = await prisma.bootcamp.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends ProfileCreateManyArgs>(args?: SelectSubset<T, ProfileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends BootcampCreateManyArgs>(args?: SelectSubset<T, BootcampCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Profile.
-     * @param {ProfileDeleteArgs} args - Arguments to delete one Profile.
+     * Create many Bootcamps and returns the data saved in the database.
+     * @param {BootcampCreateManyAndReturnArgs} args - Arguments to create many Bootcamps.
      * @example
-     * // Delete one Profile
-     * const Profile = await prisma.profile.delete({
-     *   where: {
-     *     // ... filter to delete one Profile
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ProfileDeleteArgs>(args: SelectSubset<T, ProfileDeleteArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one Profile.
-     * @param {ProfileUpdateArgs} args - Arguments to update one Profile.
-     * @example
-     * // Update one Profile
-     * const profile = await prisma.profile.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
+     * // Create many Bootcamps
+     * const bootcamp = await prisma.bootcamp.createManyAndReturn({
+     *   data: [
      *     // ... provide data here
-     *   }
+     *   ]
      * })
      * 
-     */
-    update<T extends ProfileUpdateArgs>(args: SelectSubset<T, ProfileUpdateArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more Profiles.
-     * @param {ProfileDeleteManyArgs} args - Arguments to filter Profiles to delete.
-     * @example
-     * // Delete a few Profiles
-     * const { count } = await prisma.profile.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
+     * // Create many Bootcamps and only return the `bootcamp_id`
+     * const bootcampWithBootcamp_idOnly = await prisma.bootcamp.createManyAndReturn({ 
+     *   select: { bootcamp_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
      * })
-     * 
-     */
-    deleteMany<T extends ProfileDeleteManyArgs>(args?: SelectSubset<T, ProfileDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Profiles.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProfileUpdateManyArgs} args - Arguments to update one or more rows.
+     * 
+     */
+    createManyAndReturn<T extends BootcampCreateManyAndReturnArgs>(args?: SelectSubset<T, BootcampCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Bootcamp.
+     * @param {BootcampDeleteArgs} args - Arguments to delete one Bootcamp.
      * @example
-     * // Update many Profiles
-     * const profile = await prisma.profile.updateMany({
+     * // Delete one Bootcamp
+     * const Bootcamp = await prisma.bootcamp.delete({
+     *   where: {
+     *     // ... filter to delete one Bootcamp
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BootcampDeleteArgs>(args: SelectSubset<T, BootcampDeleteArgs<ExtArgs>>): Prisma__BootcampClient<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Bootcamp.
+     * @param {BootcampUpdateArgs} args - Arguments to update one Bootcamp.
+     * @example
+     * // Update one Bootcamp
+     * const bootcamp = await prisma.bootcamp.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2408,79 +2738,89 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends ProfileUpdateManyArgs>(args: SelectSubset<T, ProfileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    update<T extends BootcampUpdateArgs>(args: SelectSubset<T, BootcampUpdateArgs<ExtArgs>>): Prisma__BootcampClient<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
-     * Create or update one Profile.
-     * @param {ProfileUpsertArgs} args - Arguments to update or create a Profile.
+     * Delete zero or more Bootcamps.
+     * @param {BootcampDeleteManyArgs} args - Arguments to filter Bootcamps to delete.
      * @example
-     * // Update or create a Profile
-     * const profile = await prisma.profile.upsert({
+     * // Delete a few Bootcamps
+     * const { count } = await prisma.bootcamp.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BootcampDeleteManyArgs>(args?: SelectSubset<T, BootcampDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Bootcamps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BootcampUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Bootcamps
+     * const bootcamp = await prisma.bootcamp.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BootcampUpdateManyArgs>(args: SelectSubset<T, BootcampUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Bootcamp.
+     * @param {BootcampUpsertArgs} args - Arguments to update or create a Bootcamp.
+     * @example
+     * // Update or create a Bootcamp
+     * const bootcamp = await prisma.bootcamp.upsert({
      *   create: {
-     *     // ... data to create a Profile
+     *     // ... data to create a Bootcamp
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Profile we want to update
+     *     // ... the filter for the Bootcamp we want to update
      *   }
      * })
      */
-    upsert<T extends ProfileUpsertArgs>(args: SelectSubset<T, ProfileUpsertArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-    /**
-     * Find zero or more Profiles that matches the filter.
-     * @param {ProfileFindRawArgs} args - Select which filters you would like to apply.
-     * @example
-     * const profile = await prisma.profile.findRaw({
-     *   filter: { age: { $gt: 25 } } 
-     * })
-     */
-    findRaw(args?: ProfileFindRawArgs): Prisma.PrismaPromise<JsonObject>
-
-    /**
-     * Perform aggregation operations on a Profile.
-     * @param {ProfileAggregateRawArgs} args - Select which aggregations you would like to apply.
-     * @example
-     * const profile = await prisma.profile.aggregateRaw({
-     *   pipeline: [
-     *     { $match: { status: "registered" } },
-     *     { $group: { _id: "$country", total: { $sum: 1 } } }
-     *   ]
-     * })
-     */
-    aggregateRaw(args?: ProfileAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+    upsert<T extends BootcampUpsertArgs>(args: SelectSubset<T, BootcampUpsertArgs<ExtArgs>>): Prisma__BootcampClient<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
 
     /**
-     * Count the number of Profiles.
+     * Count the number of Bootcamps.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProfileCountArgs} args - Arguments to filter Profiles to count.
+     * @param {BootcampCountArgs} args - Arguments to filter Bootcamps to count.
      * @example
-     * // Count the number of Profiles
-     * const count = await prisma.profile.count({
+     * // Count the number of Bootcamps
+     * const count = await prisma.bootcamp.count({
      *   where: {
-     *     // ... the filter for the Profiles we want to count
+     *     // ... the filter for the Bootcamps we want to count
      *   }
      * })
     **/
-    count<T extends ProfileCountArgs>(
-      args?: Subset<T, ProfileCountArgs>,
+    count<T extends BootcampCountArgs>(
+      args?: Subset<T, BootcampCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ProfileCountAggregateOutputType>
+          : GetScalarType<T['select'], BootcampCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Profile.
+     * Allows you to perform aggregations operations on a Bootcamp.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {BootcampAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -2500,13 +2840,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ProfileAggregateArgs>(args: Subset<T, ProfileAggregateArgs>): Prisma.PrismaPromise<GetProfileAggregateType<T>>
+    aggregate<T extends BootcampAggregateArgs>(args: Subset<T, BootcampAggregateArgs>): Prisma.PrismaPromise<GetBootcampAggregateType<T>>
 
     /**
-     * Group by Profile.
+     * Group by Bootcamp.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProfileGroupByArgs} args - Group by arguments.
+     * @param {BootcampGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -2521,14 +2861,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ProfileGroupByArgs,
+      T extends BootcampGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ProfileGroupByArgs['orderBy'] }
-        : { orderBy?: ProfileGroupByArgs['orderBy'] },
+        ? { orderBy: BootcampGroupByArgs['orderBy'] }
+        : { orderBy?: BootcampGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -2577,22 +2917,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ProfileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProfileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, BootcampGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBootcampGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Profile model
+   * Fields of the Bootcamp model
    */
-  readonly fields: ProfileFieldRefs;
+  readonly fields: BootcampFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Profile.
+   * The delegate class that acts as a "Promise-like" for Bootcamp.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__BootcampClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    bookings<T extends Bootcamp$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, Bootcamp$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2619,357 +2959,3251 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Profile model
+   * Fields of the Bootcamp model
    */ 
-  interface ProfileFieldRefs {
-    readonly id: FieldRef<"Profile", 'String'>
-    readonly contact: FieldRef<"Profile", 'String'>
-    readonly city: FieldRef<"Profile", 'String'>
-    readonly gender: FieldRef<"Profile", 'Gender'>
-    readonly age: FieldRef<"Profile", 'Int'>
-    readonly type: FieldRef<"Profile", 'StudentType'>
-    readonly college: FieldRef<"Profile", 'String'>
-    readonly course_passed: FieldRef<"Profile", 'String'>
-    readonly passing_year: FieldRef<"Profile", 'Int'>
-    readonly experience: FieldRef<"Profile", 'Int'>
-    readonly userId: FieldRef<"Profile", 'String'>
+  interface BootcampFieldRefs {
+    readonly bootcamp_id: FieldRef<"Bootcamp", 'Int'>
+    readonly name: FieldRef<"Bootcamp", 'String'>
+    readonly description: FieldRef<"Bootcamp", 'String'>
+    readonly schedule: FieldRef<"Bootcamp", 'Json'>
+    readonly dates: FieldRef<"Bootcamp", 'DateTime[]'>
+    readonly amount: FieldRef<"Bootcamp", 'Int'>
+    readonly mentors: FieldRef<"Bootcamp", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * Profile findUnique
+   * Bootcamp findUnique
    */
-  export type ProfileFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Profile
+     * Select specific fields to fetch from the Bootcamp
      */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BootcampSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
+    include?: BootcampInclude<ExtArgs> | null
     /**
-     * Filter, which Profile to fetch.
+     * Filter, which Bootcamp to fetch.
      */
-    where: ProfileWhereUniqueInput
+    where: BootcampWhereUniqueInput
   }
 
   /**
-   * Profile findUniqueOrThrow
+   * Bootcamp findUniqueOrThrow
    */
-  export type ProfileFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Profile
+     * Select specific fields to fetch from the Bootcamp
      */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BootcampSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
+    include?: BootcampInclude<ExtArgs> | null
     /**
-     * Filter, which Profile to fetch.
+     * Filter, which Bootcamp to fetch.
      */
-    where: ProfileWhereUniqueInput
+    where: BootcampWhereUniqueInput
   }
 
   /**
-   * Profile findFirst
+   * Bootcamp findFirst
    */
-  export type ProfileFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Profile
+     * Select specific fields to fetch from the Bootcamp
      */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BootcampSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
+    include?: BootcampInclude<ExtArgs> | null
     /**
-     * Filter, which Profile to fetch.
+     * Filter, which Bootcamp to fetch.
      */
-    where?: ProfileWhereInput
+    where?: BootcampWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Profiles to fetch.
+     * Determine the order of Bootcamps to fetch.
      */
-    orderBy?: ProfileOrderByWithRelationInput | ProfileOrderByWithRelationInput[]
+    orderBy?: BootcampOrderByWithRelationInput | BootcampOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Profiles.
+     * Sets the position for searching for Bootcamps.
      */
-    cursor?: ProfileWhereUniqueInput
+    cursor?: BootcampWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Profiles from the position of the cursor.
+     * Take `±n` Bootcamps from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Profiles.
+     * Skip the first `n` Bootcamps.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Profiles.
+     * Filter by unique combinations of Bootcamps.
      */
-    distinct?: ProfileScalarFieldEnum | ProfileScalarFieldEnum[]
+    distinct?: BootcampScalarFieldEnum | BootcampScalarFieldEnum[]
   }
 
   /**
-   * Profile findFirstOrThrow
+   * Bootcamp findFirstOrThrow
    */
-  export type ProfileFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Profile
+     * Select specific fields to fetch from the Bootcamp
      */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BootcampSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
+    include?: BootcampInclude<ExtArgs> | null
     /**
-     * Filter, which Profile to fetch.
+     * Filter, which Bootcamp to fetch.
      */
-    where?: ProfileWhereInput
+    where?: BootcampWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Profiles to fetch.
+     * Determine the order of Bootcamps to fetch.
      */
-    orderBy?: ProfileOrderByWithRelationInput | ProfileOrderByWithRelationInput[]
+    orderBy?: BootcampOrderByWithRelationInput | BootcampOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Profiles.
+     * Sets the position for searching for Bootcamps.
      */
-    cursor?: ProfileWhereUniqueInput
+    cursor?: BootcampWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Profiles from the position of the cursor.
+     * Take `±n` Bootcamps from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Profiles.
+     * Skip the first `n` Bootcamps.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Profiles.
+     * Filter by unique combinations of Bootcamps.
      */
-    distinct?: ProfileScalarFieldEnum | ProfileScalarFieldEnum[]
+    distinct?: BootcampScalarFieldEnum | BootcampScalarFieldEnum[]
   }
 
   /**
-   * Profile findMany
+   * Bootcamp findMany
    */
-  export type ProfileFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Profile
+     * Select specific fields to fetch from the Bootcamp
      */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BootcampSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
+    include?: BootcampInclude<ExtArgs> | null
     /**
-     * Filter, which Profiles to fetch.
+     * Filter, which Bootcamps to fetch.
      */
-    where?: ProfileWhereInput
+    where?: BootcampWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Profiles to fetch.
+     * Determine the order of Bootcamps to fetch.
      */
-    orderBy?: ProfileOrderByWithRelationInput | ProfileOrderByWithRelationInput[]
+    orderBy?: BootcampOrderByWithRelationInput | BootcampOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Profiles.
+     * Sets the position for listing Bootcamps.
      */
-    cursor?: ProfileWhereUniqueInput
+    cursor?: BootcampWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Profiles from the position of the cursor.
+     * Take `±n` Bootcamps from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Profiles.
+     * Skip the first `n` Bootcamps.
      */
     skip?: number
-    distinct?: ProfileScalarFieldEnum | ProfileScalarFieldEnum[]
+    distinct?: BootcampScalarFieldEnum | BootcampScalarFieldEnum[]
   }
 
   /**
-   * Profile create
+   * Bootcamp create
    */
-  export type ProfileCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Profile
+     * Select specific fields to fetch from the Bootcamp
      */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BootcampSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
+    include?: BootcampInclude<ExtArgs> | null
     /**
-     * The data needed to create a Profile.
+     * The data needed to create a Bootcamp.
      */
-    data: XOR<ProfileCreateInput, ProfileUncheckedCreateInput>
+    data: XOR<BootcampCreateInput, BootcampUncheckedCreateInput>
   }
 
   /**
-   * Profile createMany
+   * Bootcamp createMany
    */
-  export type ProfileCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Profiles.
+     * The data used to create many Bootcamps.
      */
-    data: ProfileCreateManyInput | ProfileCreateManyInput[]
+    data: BootcampCreateManyInput | BootcampCreateManyInput[]
+    skipDuplicates?: boolean
   }
 
   /**
-   * Profile update
+   * Bootcamp createManyAndReturn
    */
-  export type ProfileUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Profile
+     * Select specific fields to fetch from the Bootcamp
      */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BootcampSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Bootcamps.
+     */
+    data: BootcampCreateManyInput | BootcampCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Bootcamp update
+   */
+  export type BootcampUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bootcamp
+     */
+    select?: BootcampSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
+    include?: BootcampInclude<ExtArgs> | null
     /**
-     * The data needed to update a Profile.
+     * The data needed to update a Bootcamp.
      */
-    data: XOR<ProfileUpdateInput, ProfileUncheckedUpdateInput>
+    data: XOR<BootcampUpdateInput, BootcampUncheckedUpdateInput>
     /**
-     * Choose, which Profile to update.
+     * Choose, which Bootcamp to update.
      */
-    where: ProfileWhereUniqueInput
+    where: BootcampWhereUniqueInput
   }
 
   /**
-   * Profile updateMany
+   * Bootcamp updateMany
    */
-  export type ProfileUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Profiles.
+     * The data used to update Bootcamps.
      */
-    data: XOR<ProfileUpdateManyMutationInput, ProfileUncheckedUpdateManyInput>
+    data: XOR<BootcampUpdateManyMutationInput, BootcampUncheckedUpdateManyInput>
     /**
-     * Filter which Profiles to update
+     * Filter which Bootcamps to update
      */
-    where?: ProfileWhereInput
+    where?: BootcampWhereInput
   }
 
   /**
-   * Profile upsert
+   * Bootcamp upsert
    */
-  export type ProfileUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Profile
+     * Select specific fields to fetch from the Bootcamp
      */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BootcampSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
+    include?: BootcampInclude<ExtArgs> | null
     /**
-     * The filter to search for the Profile to update in case it exists.
+     * The filter to search for the Bootcamp to update in case it exists.
      */
-    where: ProfileWhereUniqueInput
+    where: BootcampWhereUniqueInput
     /**
-     * In case the Profile found by the `where` argument doesn't exist, create a new Profile with this data.
+     * In case the Bootcamp found by the `where` argument doesn't exist, create a new Bootcamp with this data.
      */
-    create: XOR<ProfileCreateInput, ProfileUncheckedCreateInput>
+    create: XOR<BootcampCreateInput, BootcampUncheckedCreateInput>
     /**
-     * In case the Profile was found with the provided `where` argument, update it with this data.
+     * In case the Bootcamp was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<ProfileUpdateInput, ProfileUncheckedUpdateInput>
+    update: XOR<BootcampUpdateInput, BootcampUncheckedUpdateInput>
   }
 
   /**
-   * Profile delete
+   * Bootcamp delete
    */
-  export type ProfileDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Profile
+     * Select specific fields to fetch from the Bootcamp
      */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BootcampSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
+    include?: BootcampInclude<ExtArgs> | null
     /**
-     * Filter which Profile to delete.
+     * Filter which Bootcamp to delete.
      */
-    where: ProfileWhereUniqueInput
+    where: BootcampWhereUniqueInput
   }
 
   /**
-   * Profile deleteMany
+   * Bootcamp deleteMany
    */
-  export type ProfileDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BootcampDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Profiles to delete
+     * Filter which Bootcamps to delete
      */
-    where?: ProfileWhereInput
+    where?: BootcampWhereInput
   }
 
   /**
-   * Profile findRaw
+   * Bootcamp.bookings
    */
-  export type ProfileFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Bootcamp$bookingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     * Select specific fields to fetch from the Bookings
      */
-    filter?: InputJsonValue
-    /**
-     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
-     */
-    options?: InputJsonValue
-  }
-
-  /**
-   * Profile aggregateRaw
-   */
-  export type ProfileAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
-     */
-    pipeline?: InputJsonValue[]
-    /**
-     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
-     */
-    options?: InputJsonValue
-  }
-
-  /**
-   * Profile without action
-   */
-  export type ProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Profile
-     */
-    select?: ProfileSelect<ExtArgs> | null
+    select?: BookingsSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProfileInclude<ExtArgs> | null
+    include?: BookingsInclude<ExtArgs> | null
+    where?: BookingsWhereInput
+    orderBy?: BookingsOrderByWithRelationInput | BookingsOrderByWithRelationInput[]
+    cursor?: BookingsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookingsScalarFieldEnum | BookingsScalarFieldEnum[]
+  }
+
+  /**
+   * Bootcamp without action
+   */
+  export type BootcampDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bootcamp
+     */
+    select?: BootcampSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BootcampInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Mentor
+   */
+
+  export type AggregateMentor = {
+    _count: MentorCountAggregateOutputType | null
+    _avg: MentorAvgAggregateOutputType | null
+    _sum: MentorSumAggregateOutputType | null
+    _min: MentorMinAggregateOutputType | null
+    _max: MentorMaxAggregateOutputType | null
+  }
+
+  export type MentorAvgAggregateOutputType = {
+    mentor_id: number | null
+  }
+
+  export type MentorSumAggregateOutputType = {
+    mentor_id: number | null
+  }
+
+  export type MentorMinAggregateOutputType = {
+    mentor_id: number | null
+    name: string | null
+    bio: string | null
+    expertise: string | null
+  }
+
+  export type MentorMaxAggregateOutputType = {
+    mentor_id: number | null
+    name: string | null
+    bio: string | null
+    expertise: string | null
+  }
+
+  export type MentorCountAggregateOutputType = {
+    mentor_id: number
+    name: number
+    bio: number
+    expertise: number
+    _all: number
+  }
+
+
+  export type MentorAvgAggregateInputType = {
+    mentor_id?: true
+  }
+
+  export type MentorSumAggregateInputType = {
+    mentor_id?: true
+  }
+
+  export type MentorMinAggregateInputType = {
+    mentor_id?: true
+    name?: true
+    bio?: true
+    expertise?: true
+  }
+
+  export type MentorMaxAggregateInputType = {
+    mentor_id?: true
+    name?: true
+    bio?: true
+    expertise?: true
+  }
+
+  export type MentorCountAggregateInputType = {
+    mentor_id?: true
+    name?: true
+    bio?: true
+    expertise?: true
+    _all?: true
+  }
+
+  export type MentorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Mentor to aggregate.
+     */
+    where?: MentorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Mentors to fetch.
+     */
+    orderBy?: MentorOrderByWithRelationInput | MentorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MentorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Mentors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Mentors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Mentors
+    **/
+    _count?: true | MentorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MentorAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MentorSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MentorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MentorMaxAggregateInputType
+  }
+
+  export type GetMentorAggregateType<T extends MentorAggregateArgs> = {
+        [P in keyof T & keyof AggregateMentor]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMentor[P]>
+      : GetScalarType<T[P], AggregateMentor[P]>
+  }
+
+
+
+
+  export type MentorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MentorWhereInput
+    orderBy?: MentorOrderByWithAggregationInput | MentorOrderByWithAggregationInput[]
+    by: MentorScalarFieldEnum[] | MentorScalarFieldEnum
+    having?: MentorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MentorCountAggregateInputType | true
+    _avg?: MentorAvgAggregateInputType
+    _sum?: MentorSumAggregateInputType
+    _min?: MentorMinAggregateInputType
+    _max?: MentorMaxAggregateInputType
+  }
+
+  export type MentorGroupByOutputType = {
+    mentor_id: number
+    name: string
+    bio: string | null
+    expertise: string | null
+    _count: MentorCountAggregateOutputType | null
+    _avg: MentorAvgAggregateOutputType | null
+    _sum: MentorSumAggregateOutputType | null
+    _min: MentorMinAggregateOutputType | null
+    _max: MentorMaxAggregateOutputType | null
+  }
+
+  type GetMentorGroupByPayload<T extends MentorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MentorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MentorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MentorGroupByOutputType[P]>
+            : GetScalarType<T[P], MentorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MentorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    mentor_id?: boolean
+    name?: boolean
+    bio?: boolean
+    expertise?: boolean
+  }, ExtArgs["result"]["mentor"]>
+
+  export type MentorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    mentor_id?: boolean
+    name?: boolean
+    bio?: boolean
+    expertise?: boolean
+  }, ExtArgs["result"]["mentor"]>
+
+  export type MentorSelectScalar = {
+    mentor_id?: boolean
+    name?: boolean
+    bio?: boolean
+    expertise?: boolean
+  }
+
+
+  export type $MentorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Mentor"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      mentor_id: number
+      name: string
+      bio: string | null
+      expertise: string | null
+    }, ExtArgs["result"]["mentor"]>
+    composites: {}
+  }
+
+  type MentorGetPayload<S extends boolean | null | undefined | MentorDefaultArgs> = $Result.GetResult<Prisma.$MentorPayload, S>
+
+  type MentorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MentorFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MentorCountAggregateInputType | true
+    }
+
+  export interface MentorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Mentor'], meta: { name: 'Mentor' } }
+    /**
+     * Find zero or one Mentor that matches the filter.
+     * @param {MentorFindUniqueArgs} args - Arguments to find a Mentor
+     * @example
+     * // Get one Mentor
+     * const mentor = await prisma.mentor.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MentorFindUniqueArgs>(args: SelectSubset<T, MentorFindUniqueArgs<ExtArgs>>): Prisma__MentorClient<$Result.GetResult<Prisma.$MentorPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Mentor that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MentorFindUniqueOrThrowArgs} args - Arguments to find a Mentor
+     * @example
+     * // Get one Mentor
+     * const mentor = await prisma.mentor.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MentorFindUniqueOrThrowArgs>(args: SelectSubset<T, MentorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MentorClient<$Result.GetResult<Prisma.$MentorPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Mentor that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MentorFindFirstArgs} args - Arguments to find a Mentor
+     * @example
+     * // Get one Mentor
+     * const mentor = await prisma.mentor.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MentorFindFirstArgs>(args?: SelectSubset<T, MentorFindFirstArgs<ExtArgs>>): Prisma__MentorClient<$Result.GetResult<Prisma.$MentorPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Mentor that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MentorFindFirstOrThrowArgs} args - Arguments to find a Mentor
+     * @example
+     * // Get one Mentor
+     * const mentor = await prisma.mentor.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MentorFindFirstOrThrowArgs>(args?: SelectSubset<T, MentorFindFirstOrThrowArgs<ExtArgs>>): Prisma__MentorClient<$Result.GetResult<Prisma.$MentorPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Mentors that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MentorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mentors
+     * const mentors = await prisma.mentor.findMany()
+     * 
+     * // Get first 10 Mentors
+     * const mentors = await prisma.mentor.findMany({ take: 10 })
+     * 
+     * // Only select the `mentor_id`
+     * const mentorWithMentor_idOnly = await prisma.mentor.findMany({ select: { mentor_id: true } })
+     * 
+     */
+    findMany<T extends MentorFindManyArgs>(args?: SelectSubset<T, MentorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MentorPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Mentor.
+     * @param {MentorCreateArgs} args - Arguments to create a Mentor.
+     * @example
+     * // Create one Mentor
+     * const Mentor = await prisma.mentor.create({
+     *   data: {
+     *     // ... data to create a Mentor
+     *   }
+     * })
+     * 
+     */
+    create<T extends MentorCreateArgs>(args: SelectSubset<T, MentorCreateArgs<ExtArgs>>): Prisma__MentorClient<$Result.GetResult<Prisma.$MentorPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Mentors.
+     * @param {MentorCreateManyArgs} args - Arguments to create many Mentors.
+     * @example
+     * // Create many Mentors
+     * const mentor = await prisma.mentor.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MentorCreateManyArgs>(args?: SelectSubset<T, MentorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Mentors and returns the data saved in the database.
+     * @param {MentorCreateManyAndReturnArgs} args - Arguments to create many Mentors.
+     * @example
+     * // Create many Mentors
+     * const mentor = await prisma.mentor.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Mentors and only return the `mentor_id`
+     * const mentorWithMentor_idOnly = await prisma.mentor.createManyAndReturn({ 
+     *   select: { mentor_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MentorCreateManyAndReturnArgs>(args?: SelectSubset<T, MentorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MentorPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Mentor.
+     * @param {MentorDeleteArgs} args - Arguments to delete one Mentor.
+     * @example
+     * // Delete one Mentor
+     * const Mentor = await prisma.mentor.delete({
+     *   where: {
+     *     // ... filter to delete one Mentor
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MentorDeleteArgs>(args: SelectSubset<T, MentorDeleteArgs<ExtArgs>>): Prisma__MentorClient<$Result.GetResult<Prisma.$MentorPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Mentor.
+     * @param {MentorUpdateArgs} args - Arguments to update one Mentor.
+     * @example
+     * // Update one Mentor
+     * const mentor = await prisma.mentor.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MentorUpdateArgs>(args: SelectSubset<T, MentorUpdateArgs<ExtArgs>>): Prisma__MentorClient<$Result.GetResult<Prisma.$MentorPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Mentors.
+     * @param {MentorDeleteManyArgs} args - Arguments to filter Mentors to delete.
+     * @example
+     * // Delete a few Mentors
+     * const { count } = await prisma.mentor.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MentorDeleteManyArgs>(args?: SelectSubset<T, MentorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MentorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mentors
+     * const mentor = await prisma.mentor.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MentorUpdateManyArgs>(args: SelectSubset<T, MentorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Mentor.
+     * @param {MentorUpsertArgs} args - Arguments to update or create a Mentor.
+     * @example
+     * // Update or create a Mentor
+     * const mentor = await prisma.mentor.upsert({
+     *   create: {
+     *     // ... data to create a Mentor
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mentor we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MentorUpsertArgs>(args: SelectSubset<T, MentorUpsertArgs<ExtArgs>>): Prisma__MentorClient<$Result.GetResult<Prisma.$MentorPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Mentors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MentorCountArgs} args - Arguments to filter Mentors to count.
+     * @example
+     * // Count the number of Mentors
+     * const count = await prisma.mentor.count({
+     *   where: {
+     *     // ... the filter for the Mentors we want to count
+     *   }
+     * })
+    **/
+    count<T extends MentorCountArgs>(
+      args?: Subset<T, MentorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MentorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mentor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MentorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MentorAggregateArgs>(args: Subset<T, MentorAggregateArgs>): Prisma.PrismaPromise<GetMentorAggregateType<T>>
+
+    /**
+     * Group by Mentor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MentorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MentorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MentorGroupByArgs['orderBy'] }
+        : { orderBy?: MentorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MentorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMentorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Mentor model
+   */
+  readonly fields: MentorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Mentor.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MentorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Mentor model
+   */ 
+  interface MentorFieldRefs {
+    readonly mentor_id: FieldRef<"Mentor", 'Int'>
+    readonly name: FieldRef<"Mentor", 'String'>
+    readonly bio: FieldRef<"Mentor", 'String'>
+    readonly expertise: FieldRef<"Mentor", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Mentor findUnique
+   */
+  export type MentorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelect<ExtArgs> | null
+    /**
+     * Filter, which Mentor to fetch.
+     */
+    where: MentorWhereUniqueInput
+  }
+
+  /**
+   * Mentor findUniqueOrThrow
+   */
+  export type MentorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelect<ExtArgs> | null
+    /**
+     * Filter, which Mentor to fetch.
+     */
+    where: MentorWhereUniqueInput
+  }
+
+  /**
+   * Mentor findFirst
+   */
+  export type MentorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelect<ExtArgs> | null
+    /**
+     * Filter, which Mentor to fetch.
+     */
+    where?: MentorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Mentors to fetch.
+     */
+    orderBy?: MentorOrderByWithRelationInput | MentorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Mentors.
+     */
+    cursor?: MentorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Mentors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Mentors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Mentors.
+     */
+    distinct?: MentorScalarFieldEnum | MentorScalarFieldEnum[]
+  }
+
+  /**
+   * Mentor findFirstOrThrow
+   */
+  export type MentorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelect<ExtArgs> | null
+    /**
+     * Filter, which Mentor to fetch.
+     */
+    where?: MentorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Mentors to fetch.
+     */
+    orderBy?: MentorOrderByWithRelationInput | MentorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Mentors.
+     */
+    cursor?: MentorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Mentors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Mentors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Mentors.
+     */
+    distinct?: MentorScalarFieldEnum | MentorScalarFieldEnum[]
+  }
+
+  /**
+   * Mentor findMany
+   */
+  export type MentorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelect<ExtArgs> | null
+    /**
+     * Filter, which Mentors to fetch.
+     */
+    where?: MentorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Mentors to fetch.
+     */
+    orderBy?: MentorOrderByWithRelationInput | MentorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Mentors.
+     */
+    cursor?: MentorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Mentors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Mentors.
+     */
+    skip?: number
+    distinct?: MentorScalarFieldEnum | MentorScalarFieldEnum[]
+  }
+
+  /**
+   * Mentor create
+   */
+  export type MentorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelect<ExtArgs> | null
+    /**
+     * The data needed to create a Mentor.
+     */
+    data: XOR<MentorCreateInput, MentorUncheckedCreateInput>
+  }
+
+  /**
+   * Mentor createMany
+   */
+  export type MentorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Mentors.
+     */
+    data: MentorCreateManyInput | MentorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Mentor createManyAndReturn
+   */
+  export type MentorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Mentors.
+     */
+    data: MentorCreateManyInput | MentorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Mentor update
+   */
+  export type MentorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelect<ExtArgs> | null
+    /**
+     * The data needed to update a Mentor.
+     */
+    data: XOR<MentorUpdateInput, MentorUncheckedUpdateInput>
+    /**
+     * Choose, which Mentor to update.
+     */
+    where: MentorWhereUniqueInput
+  }
+
+  /**
+   * Mentor updateMany
+   */
+  export type MentorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Mentors.
+     */
+    data: XOR<MentorUpdateManyMutationInput, MentorUncheckedUpdateManyInput>
+    /**
+     * Filter which Mentors to update
+     */
+    where?: MentorWhereInput
+  }
+
+  /**
+   * Mentor upsert
+   */
+  export type MentorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelect<ExtArgs> | null
+    /**
+     * The filter to search for the Mentor to update in case it exists.
+     */
+    where: MentorWhereUniqueInput
+    /**
+     * In case the Mentor found by the `where` argument doesn't exist, create a new Mentor with this data.
+     */
+    create: XOR<MentorCreateInput, MentorUncheckedCreateInput>
+    /**
+     * In case the Mentor was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MentorUpdateInput, MentorUncheckedUpdateInput>
+  }
+
+  /**
+   * Mentor delete
+   */
+  export type MentorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelect<ExtArgs> | null
+    /**
+     * Filter which Mentor to delete.
+     */
+    where: MentorWhereUniqueInput
+  }
+
+  /**
+   * Mentor deleteMany
+   */
+  export type MentorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Mentors to delete
+     */
+    where?: MentorWhereInput
+  }
+
+  /**
+   * Mentor without action
+   */
+  export type MentorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor
+     */
+    select?: MentorSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Bookings
+   */
+
+  export type AggregateBookings = {
+    _count: BookingsCountAggregateOutputType | null
+    _avg: BookingsAvgAggregateOutputType | null
+    _sum: BookingsSumAggregateOutputType | null
+    _min: BookingsMinAggregateOutputType | null
+    _max: BookingsMaxAggregateOutputType | null
+  }
+
+  export type BookingsAvgAggregateOutputType = {
+    booking_id: number | null
+    userId: number | null
+    bootcampId: number | null
+  }
+
+  export type BookingsSumAggregateOutputType = {
+    booking_id: number | null
+    userId: number | null
+    bootcampId: number | null
+  }
+
+  export type BookingsMinAggregateOutputType = {
+    booking_id: number | null
+    userId: number | null
+    bootcampId: number | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type BookingsMaxAggregateOutputType = {
+    booking_id: number | null
+    userId: number | null
+    bootcampId: number | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type BookingsCountAggregateOutputType = {
+    booking_id: number
+    userId: number
+    bootcampId: number
+    status: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type BookingsAvgAggregateInputType = {
+    booking_id?: true
+    userId?: true
+    bootcampId?: true
+  }
+
+  export type BookingsSumAggregateInputType = {
+    booking_id?: true
+    userId?: true
+    bootcampId?: true
+  }
+
+  export type BookingsMinAggregateInputType = {
+    booking_id?: true
+    userId?: true
+    bootcampId?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type BookingsMaxAggregateInputType = {
+    booking_id?: true
+    userId?: true
+    bootcampId?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type BookingsCountAggregateInputType = {
+    booking_id?: true
+    userId?: true
+    bootcampId?: true
+    status?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type BookingsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Bookings to aggregate.
+     */
+    where?: BookingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Bookings to fetch.
+     */
+    orderBy?: BookingsOrderByWithRelationInput | BookingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BookingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Bookings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Bookings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Bookings
+    **/
+    _count?: true | BookingsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BookingsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BookingsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BookingsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BookingsMaxAggregateInputType
+  }
+
+  export type GetBookingsAggregateType<T extends BookingsAggregateArgs> = {
+        [P in keyof T & keyof AggregateBookings]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBookings[P]>
+      : GetScalarType<T[P], AggregateBookings[P]>
+  }
+
+
+
+
+  export type BookingsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingsWhereInput
+    orderBy?: BookingsOrderByWithAggregationInput | BookingsOrderByWithAggregationInput[]
+    by: BookingsScalarFieldEnum[] | BookingsScalarFieldEnum
+    having?: BookingsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BookingsCountAggregateInputType | true
+    _avg?: BookingsAvgAggregateInputType
+    _sum?: BookingsSumAggregateInputType
+    _min?: BookingsMinAggregateInputType
+    _max?: BookingsMaxAggregateInputType
+  }
+
+  export type BookingsGroupByOutputType = {
+    booking_id: number
+    userId: number
+    bootcampId: number
+    status: string
+    createdAt: Date
+    _count: BookingsCountAggregateOutputType | null
+    _avg: BookingsAvgAggregateOutputType | null
+    _sum: BookingsSumAggregateOutputType | null
+    _min: BookingsMinAggregateOutputType | null
+    _max: BookingsMaxAggregateOutputType | null
+  }
+
+  type GetBookingsGroupByPayload<T extends BookingsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BookingsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BookingsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BookingsGroupByOutputType[P]>
+            : GetScalarType<T[P], BookingsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BookingsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    booking_id?: boolean
+    userId?: boolean
+    bootcampId?: boolean
+    status?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    bootcamp?: boolean | BootcampDefaultArgs<ExtArgs>
+    payment?: boolean | Bookings$paymentArgs<ExtArgs>
+    _count?: boolean | BookingsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookings"]>
+
+  export type BookingsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    booking_id?: boolean
+    userId?: boolean
+    bootcampId?: boolean
+    status?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    bootcamp?: boolean | BootcampDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookings"]>
+
+  export type BookingsSelectScalar = {
+    booking_id?: boolean
+    userId?: boolean
+    bootcampId?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }
+
+  export type BookingsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    bootcamp?: boolean | BootcampDefaultArgs<ExtArgs>
+    payment?: boolean | Bookings$paymentArgs<ExtArgs>
+    _count?: boolean | BookingsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BookingsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    bootcamp?: boolean | BootcampDefaultArgs<ExtArgs>
+  }
+
+  export type $BookingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Bookings"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      bootcamp: Prisma.$BootcampPayload<ExtArgs>
+      payment: Prisma.$PaymentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      booking_id: number
+      userId: number
+      bootcampId: number
+      status: string
+      createdAt: Date
+    }, ExtArgs["result"]["bookings"]>
+    composites: {}
+  }
+
+  type BookingsGetPayload<S extends boolean | null | undefined | BookingsDefaultArgs> = $Result.GetResult<Prisma.$BookingsPayload, S>
+
+  type BookingsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<BookingsFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: BookingsCountAggregateInputType | true
+    }
+
+  export interface BookingsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Bookings'], meta: { name: 'Bookings' } }
+    /**
+     * Find zero or one Bookings that matches the filter.
+     * @param {BookingsFindUniqueArgs} args - Arguments to find a Bookings
+     * @example
+     * // Get one Bookings
+     * const bookings = await prisma.bookings.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BookingsFindUniqueArgs>(args: SelectSubset<T, BookingsFindUniqueArgs<ExtArgs>>): Prisma__BookingsClient<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Bookings that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {BookingsFindUniqueOrThrowArgs} args - Arguments to find a Bookings
+     * @example
+     * // Get one Bookings
+     * const bookings = await prisma.bookings.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BookingsFindUniqueOrThrowArgs>(args: SelectSubset<T, BookingsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BookingsClient<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Bookings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingsFindFirstArgs} args - Arguments to find a Bookings
+     * @example
+     * // Get one Bookings
+     * const bookings = await prisma.bookings.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BookingsFindFirstArgs>(args?: SelectSubset<T, BookingsFindFirstArgs<ExtArgs>>): Prisma__BookingsClient<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Bookings that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingsFindFirstOrThrowArgs} args - Arguments to find a Bookings
+     * @example
+     * // Get one Bookings
+     * const bookings = await prisma.bookings.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BookingsFindFirstOrThrowArgs>(args?: SelectSubset<T, BookingsFindFirstOrThrowArgs<ExtArgs>>): Prisma__BookingsClient<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Bookings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Bookings
+     * const bookings = await prisma.bookings.findMany()
+     * 
+     * // Get first 10 Bookings
+     * const bookings = await prisma.bookings.findMany({ take: 10 })
+     * 
+     * // Only select the `booking_id`
+     * const bookingsWithBooking_idOnly = await prisma.bookings.findMany({ select: { booking_id: true } })
+     * 
+     */
+    findMany<T extends BookingsFindManyArgs>(args?: SelectSubset<T, BookingsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Bookings.
+     * @param {BookingsCreateArgs} args - Arguments to create a Bookings.
+     * @example
+     * // Create one Bookings
+     * const Bookings = await prisma.bookings.create({
+     *   data: {
+     *     // ... data to create a Bookings
+     *   }
+     * })
+     * 
+     */
+    create<T extends BookingsCreateArgs>(args: SelectSubset<T, BookingsCreateArgs<ExtArgs>>): Prisma__BookingsClient<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Bookings.
+     * @param {BookingsCreateManyArgs} args - Arguments to create many Bookings.
+     * @example
+     * // Create many Bookings
+     * const bookings = await prisma.bookings.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BookingsCreateManyArgs>(args?: SelectSubset<T, BookingsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Bookings and returns the data saved in the database.
+     * @param {BookingsCreateManyAndReturnArgs} args - Arguments to create many Bookings.
+     * @example
+     * // Create many Bookings
+     * const bookings = await prisma.bookings.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Bookings and only return the `booking_id`
+     * const bookingsWithBooking_idOnly = await prisma.bookings.createManyAndReturn({ 
+     *   select: { booking_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BookingsCreateManyAndReturnArgs>(args?: SelectSubset<T, BookingsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Bookings.
+     * @param {BookingsDeleteArgs} args - Arguments to delete one Bookings.
+     * @example
+     * // Delete one Bookings
+     * const Bookings = await prisma.bookings.delete({
+     *   where: {
+     *     // ... filter to delete one Bookings
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BookingsDeleteArgs>(args: SelectSubset<T, BookingsDeleteArgs<ExtArgs>>): Prisma__BookingsClient<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Bookings.
+     * @param {BookingsUpdateArgs} args - Arguments to update one Bookings.
+     * @example
+     * // Update one Bookings
+     * const bookings = await prisma.bookings.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BookingsUpdateArgs>(args: SelectSubset<T, BookingsUpdateArgs<ExtArgs>>): Prisma__BookingsClient<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Bookings.
+     * @param {BookingsDeleteManyArgs} args - Arguments to filter Bookings to delete.
+     * @example
+     * // Delete a few Bookings
+     * const { count } = await prisma.bookings.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BookingsDeleteManyArgs>(args?: SelectSubset<T, BookingsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Bookings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Bookings
+     * const bookings = await prisma.bookings.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BookingsUpdateManyArgs>(args: SelectSubset<T, BookingsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Bookings.
+     * @param {BookingsUpsertArgs} args - Arguments to update or create a Bookings.
+     * @example
+     * // Update or create a Bookings
+     * const bookings = await prisma.bookings.upsert({
+     *   create: {
+     *     // ... data to create a Bookings
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Bookings we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BookingsUpsertArgs>(args: SelectSubset<T, BookingsUpsertArgs<ExtArgs>>): Prisma__BookingsClient<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Bookings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingsCountArgs} args - Arguments to filter Bookings to count.
+     * @example
+     * // Count the number of Bookings
+     * const count = await prisma.bookings.count({
+     *   where: {
+     *     // ... the filter for the Bookings we want to count
+     *   }
+     * })
+    **/
+    count<T extends BookingsCountArgs>(
+      args?: Subset<T, BookingsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BookingsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Bookings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BookingsAggregateArgs>(args: Subset<T, BookingsAggregateArgs>): Prisma.PrismaPromise<GetBookingsAggregateType<T>>
+
+    /**
+     * Group by Bookings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BookingsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BookingsGroupByArgs['orderBy'] }
+        : { orderBy?: BookingsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BookingsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBookingsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Bookings model
+   */
+  readonly fields: BookingsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Bookings.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BookingsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    bootcamp<T extends BootcampDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BootcampDefaultArgs<ExtArgs>>): Prisma__BootcampClient<$Result.GetResult<Prisma.$BootcampPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    payment<T extends Bookings$paymentArgs<ExtArgs> = {}>(args?: Subset<T, Bookings$paymentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Bookings model
+   */ 
+  interface BookingsFieldRefs {
+    readonly booking_id: FieldRef<"Bookings", 'Int'>
+    readonly userId: FieldRef<"Bookings", 'Int'>
+    readonly bootcampId: FieldRef<"Bookings", 'Int'>
+    readonly status: FieldRef<"Bookings", 'String'>
+    readonly createdAt: FieldRef<"Bookings", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Bookings findUnique
+   */
+  export type BookingsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsInclude<ExtArgs> | null
+    /**
+     * Filter, which Bookings to fetch.
+     */
+    where: BookingsWhereUniqueInput
+  }
+
+  /**
+   * Bookings findUniqueOrThrow
+   */
+  export type BookingsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsInclude<ExtArgs> | null
+    /**
+     * Filter, which Bookings to fetch.
+     */
+    where: BookingsWhereUniqueInput
+  }
+
+  /**
+   * Bookings findFirst
+   */
+  export type BookingsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsInclude<ExtArgs> | null
+    /**
+     * Filter, which Bookings to fetch.
+     */
+    where?: BookingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Bookings to fetch.
+     */
+    orderBy?: BookingsOrderByWithRelationInput | BookingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Bookings.
+     */
+    cursor?: BookingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Bookings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Bookings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Bookings.
+     */
+    distinct?: BookingsScalarFieldEnum | BookingsScalarFieldEnum[]
+  }
+
+  /**
+   * Bookings findFirstOrThrow
+   */
+  export type BookingsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsInclude<ExtArgs> | null
+    /**
+     * Filter, which Bookings to fetch.
+     */
+    where?: BookingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Bookings to fetch.
+     */
+    orderBy?: BookingsOrderByWithRelationInput | BookingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Bookings.
+     */
+    cursor?: BookingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Bookings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Bookings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Bookings.
+     */
+    distinct?: BookingsScalarFieldEnum | BookingsScalarFieldEnum[]
+  }
+
+  /**
+   * Bookings findMany
+   */
+  export type BookingsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsInclude<ExtArgs> | null
+    /**
+     * Filter, which Bookings to fetch.
+     */
+    where?: BookingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Bookings to fetch.
+     */
+    orderBy?: BookingsOrderByWithRelationInput | BookingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Bookings.
+     */
+    cursor?: BookingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Bookings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Bookings.
+     */
+    skip?: number
+    distinct?: BookingsScalarFieldEnum | BookingsScalarFieldEnum[]
+  }
+
+  /**
+   * Bookings create
+   */
+  export type BookingsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Bookings.
+     */
+    data: XOR<BookingsCreateInput, BookingsUncheckedCreateInput>
+  }
+
+  /**
+   * Bookings createMany
+   */
+  export type BookingsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Bookings.
+     */
+    data: BookingsCreateManyInput | BookingsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Bookings createManyAndReturn
+   */
+  export type BookingsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Bookings.
+     */
+    data: BookingsCreateManyInput | BookingsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Bookings update
+   */
+  export type BookingsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Bookings.
+     */
+    data: XOR<BookingsUpdateInput, BookingsUncheckedUpdateInput>
+    /**
+     * Choose, which Bookings to update.
+     */
+    where: BookingsWhereUniqueInput
+  }
+
+  /**
+   * Bookings updateMany
+   */
+  export type BookingsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Bookings.
+     */
+    data: XOR<BookingsUpdateManyMutationInput, BookingsUncheckedUpdateManyInput>
+    /**
+     * Filter which Bookings to update
+     */
+    where?: BookingsWhereInput
+  }
+
+  /**
+   * Bookings upsert
+   */
+  export type BookingsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Bookings to update in case it exists.
+     */
+    where: BookingsWhereUniqueInput
+    /**
+     * In case the Bookings found by the `where` argument doesn't exist, create a new Bookings with this data.
+     */
+    create: XOR<BookingsCreateInput, BookingsUncheckedCreateInput>
+    /**
+     * In case the Bookings was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BookingsUpdateInput, BookingsUncheckedUpdateInput>
+  }
+
+  /**
+   * Bookings delete
+   */
+  export type BookingsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsInclude<ExtArgs> | null
+    /**
+     * Filter which Bookings to delete.
+     */
+    where: BookingsWhereUniqueInput
+  }
+
+  /**
+   * Bookings deleteMany
+   */
+  export type BookingsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Bookings to delete
+     */
+    where?: BookingsWhereInput
+  }
+
+  /**
+   * Bookings.payment
+   */
+  export type Bookings$paymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    where?: PaymentWhereInput
+    orderBy?: PaymentOrderByWithRelationInput | PaymentOrderByWithRelationInput[]
+    cursor?: PaymentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Bookings without action
+   */
+  export type BookingsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookings
+     */
+    select?: BookingsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Payment
+   */
+
+  export type AggregatePayment = {
+    _count: PaymentCountAggregateOutputType | null
+    _avg: PaymentAvgAggregateOutputType | null
+    _sum: PaymentSumAggregateOutputType | null
+    _min: PaymentMinAggregateOutputType | null
+    _max: PaymentMaxAggregateOutputType | null
+  }
+
+  export type PaymentAvgAggregateOutputType = {
+    payment_id: number | null
+    bookingId: number | null
+    amount: Decimal | null
+  }
+
+  export type PaymentSumAggregateOutputType = {
+    payment_id: number | null
+    bookingId: number | null
+    amount: Decimal | null
+  }
+
+  export type PaymentMinAggregateOutputType = {
+    payment_id: number | null
+    bookingId: number | null
+    amount: Decimal | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type PaymentMaxAggregateOutputType = {
+    payment_id: number | null
+    bookingId: number | null
+    amount: Decimal | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type PaymentCountAggregateOutputType = {
+    payment_id: number
+    bookingId: number
+    amount: number
+    status: number
+    paymentDetails: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PaymentAvgAggregateInputType = {
+    payment_id?: true
+    bookingId?: true
+    amount?: true
+  }
+
+  export type PaymentSumAggregateInputType = {
+    payment_id?: true
+    bookingId?: true
+    amount?: true
+  }
+
+  export type PaymentMinAggregateInputType = {
+    payment_id?: true
+    bookingId?: true
+    amount?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type PaymentMaxAggregateInputType = {
+    payment_id?: true
+    bookingId?: true
+    amount?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type PaymentCountAggregateInputType = {
+    payment_id?: true
+    bookingId?: true
+    amount?: true
+    status?: true
+    paymentDetails?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PaymentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Payment to aggregate.
+     */
+    where?: PaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Payments to fetch.
+     */
+    orderBy?: PaymentOrderByWithRelationInput | PaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Payments
+    **/
+    _count?: true | PaymentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PaymentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PaymentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PaymentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PaymentMaxAggregateInputType
+  }
+
+  export type GetPaymentAggregateType<T extends PaymentAggregateArgs> = {
+        [P in keyof T & keyof AggregatePayment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePayment[P]>
+      : GetScalarType<T[P], AggregatePayment[P]>
+  }
+
+
+
+
+  export type PaymentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PaymentWhereInput
+    orderBy?: PaymentOrderByWithAggregationInput | PaymentOrderByWithAggregationInput[]
+    by: PaymentScalarFieldEnum[] | PaymentScalarFieldEnum
+    having?: PaymentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PaymentCountAggregateInputType | true
+    _avg?: PaymentAvgAggregateInputType
+    _sum?: PaymentSumAggregateInputType
+    _min?: PaymentMinAggregateInputType
+    _max?: PaymentMaxAggregateInputType
+  }
+
+  export type PaymentGroupByOutputType = {
+    payment_id: number
+    bookingId: number
+    amount: Decimal
+    status: string
+    paymentDetails: JsonValue
+    createdAt: Date
+    _count: PaymentCountAggregateOutputType | null
+    _avg: PaymentAvgAggregateOutputType | null
+    _sum: PaymentSumAggregateOutputType | null
+    _min: PaymentMinAggregateOutputType | null
+    _max: PaymentMaxAggregateOutputType | null
+  }
+
+  type GetPaymentGroupByPayload<T extends PaymentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PaymentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PaymentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PaymentGroupByOutputType[P]>
+            : GetScalarType<T[P], PaymentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PaymentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    payment_id?: boolean
+    bookingId?: boolean
+    amount?: boolean
+    status?: boolean
+    paymentDetails?: boolean
+    createdAt?: boolean
+    booking?: boolean | BookingsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["payment"]>
+
+  export type PaymentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    payment_id?: boolean
+    bookingId?: boolean
+    amount?: boolean
+    status?: boolean
+    paymentDetails?: boolean
+    createdAt?: boolean
+    booking?: boolean | BookingsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["payment"]>
+
+  export type PaymentSelectScalar = {
+    payment_id?: boolean
+    bookingId?: boolean
+    amount?: boolean
+    status?: boolean
+    paymentDetails?: boolean
+    createdAt?: boolean
+  }
+
+  export type PaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    booking?: boolean | BookingsDefaultArgs<ExtArgs>
+  }
+  export type PaymentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    booking?: boolean | BookingsDefaultArgs<ExtArgs>
+  }
+
+  export type $PaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Payment"
+    objects: {
+      booking: Prisma.$BookingsPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      payment_id: number
+      bookingId: number
+      amount: Prisma.Decimal
+      status: string
+      paymentDetails: Prisma.JsonValue
+      createdAt: Date
+    }, ExtArgs["result"]["payment"]>
+    composites: {}
+  }
+
+  type PaymentGetPayload<S extends boolean | null | undefined | PaymentDefaultArgs> = $Result.GetResult<Prisma.$PaymentPayload, S>
+
+  type PaymentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PaymentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PaymentCountAggregateInputType | true
+    }
+
+  export interface PaymentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Payment'], meta: { name: 'Payment' } }
+    /**
+     * Find zero or one Payment that matches the filter.
+     * @param {PaymentFindUniqueArgs} args - Arguments to find a Payment
+     * @example
+     * // Get one Payment
+     * const payment = await prisma.payment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PaymentFindUniqueArgs>(args: SelectSubset<T, PaymentFindUniqueArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Payment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PaymentFindUniqueOrThrowArgs} args - Arguments to find a Payment
+     * @example
+     * // Get one Payment
+     * const payment = await prisma.payment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PaymentFindUniqueOrThrowArgs>(args: SelectSubset<T, PaymentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Payment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentFindFirstArgs} args - Arguments to find a Payment
+     * @example
+     * // Get one Payment
+     * const payment = await prisma.payment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PaymentFindFirstArgs>(args?: SelectSubset<T, PaymentFindFirstArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Payment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentFindFirstOrThrowArgs} args - Arguments to find a Payment
+     * @example
+     * // Get one Payment
+     * const payment = await prisma.payment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PaymentFindFirstOrThrowArgs>(args?: SelectSubset<T, PaymentFindFirstOrThrowArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Payments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Payments
+     * const payments = await prisma.payment.findMany()
+     * 
+     * // Get first 10 Payments
+     * const payments = await prisma.payment.findMany({ take: 10 })
+     * 
+     * // Only select the `payment_id`
+     * const paymentWithPayment_idOnly = await prisma.payment.findMany({ select: { payment_id: true } })
+     * 
+     */
+    findMany<T extends PaymentFindManyArgs>(args?: SelectSubset<T, PaymentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Payment.
+     * @param {PaymentCreateArgs} args - Arguments to create a Payment.
+     * @example
+     * // Create one Payment
+     * const Payment = await prisma.payment.create({
+     *   data: {
+     *     // ... data to create a Payment
+     *   }
+     * })
+     * 
+     */
+    create<T extends PaymentCreateArgs>(args: SelectSubset<T, PaymentCreateArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Payments.
+     * @param {PaymentCreateManyArgs} args - Arguments to create many Payments.
+     * @example
+     * // Create many Payments
+     * const payment = await prisma.payment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PaymentCreateManyArgs>(args?: SelectSubset<T, PaymentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Payments and returns the data saved in the database.
+     * @param {PaymentCreateManyAndReturnArgs} args - Arguments to create many Payments.
+     * @example
+     * // Create many Payments
+     * const payment = await prisma.payment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Payments and only return the `payment_id`
+     * const paymentWithPayment_idOnly = await prisma.payment.createManyAndReturn({ 
+     *   select: { payment_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PaymentCreateManyAndReturnArgs>(args?: SelectSubset<T, PaymentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Payment.
+     * @param {PaymentDeleteArgs} args - Arguments to delete one Payment.
+     * @example
+     * // Delete one Payment
+     * const Payment = await prisma.payment.delete({
+     *   where: {
+     *     // ... filter to delete one Payment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PaymentDeleteArgs>(args: SelectSubset<T, PaymentDeleteArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Payment.
+     * @param {PaymentUpdateArgs} args - Arguments to update one Payment.
+     * @example
+     * // Update one Payment
+     * const payment = await prisma.payment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PaymentUpdateArgs>(args: SelectSubset<T, PaymentUpdateArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Payments.
+     * @param {PaymentDeleteManyArgs} args - Arguments to filter Payments to delete.
+     * @example
+     * // Delete a few Payments
+     * const { count } = await prisma.payment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PaymentDeleteManyArgs>(args?: SelectSubset<T, PaymentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Payments
+     * const payment = await prisma.payment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PaymentUpdateManyArgs>(args: SelectSubset<T, PaymentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Payment.
+     * @param {PaymentUpsertArgs} args - Arguments to update or create a Payment.
+     * @example
+     * // Update or create a Payment
+     * const payment = await prisma.payment.upsert({
+     *   create: {
+     *     // ... data to create a Payment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Payment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PaymentUpsertArgs>(args: SelectSubset<T, PaymentUpsertArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentCountArgs} args - Arguments to filter Payments to count.
+     * @example
+     * // Count the number of Payments
+     * const count = await prisma.payment.count({
+     *   where: {
+     *     // ... the filter for the Payments we want to count
+     *   }
+     * })
+    **/
+    count<T extends PaymentCountArgs>(
+      args?: Subset<T, PaymentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PaymentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Payment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PaymentAggregateArgs>(args: Subset<T, PaymentAggregateArgs>): Prisma.PrismaPromise<GetPaymentAggregateType<T>>
+
+    /**
+     * Group by Payment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PaymentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PaymentGroupByArgs['orderBy'] }
+        : { orderBy?: PaymentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PaymentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPaymentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Payment model
+   */
+  readonly fields: PaymentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Payment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    booking<T extends BookingsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BookingsDefaultArgs<ExtArgs>>): Prisma__BookingsClient<$Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Payment model
+   */ 
+  interface PaymentFieldRefs {
+    readonly payment_id: FieldRef<"Payment", 'Int'>
+    readonly bookingId: FieldRef<"Payment", 'Int'>
+    readonly amount: FieldRef<"Payment", 'Decimal'>
+    readonly status: FieldRef<"Payment", 'String'>
+    readonly paymentDetails: FieldRef<"Payment", 'Json'>
+    readonly createdAt: FieldRef<"Payment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Payment findUnique
+   */
+  export type PaymentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which Payment to fetch.
+     */
+    where: PaymentWhereUniqueInput
+  }
+
+  /**
+   * Payment findUniqueOrThrow
+   */
+  export type PaymentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which Payment to fetch.
+     */
+    where: PaymentWhereUniqueInput
+  }
+
+  /**
+   * Payment findFirst
+   */
+  export type PaymentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which Payment to fetch.
+     */
+    where?: PaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Payments to fetch.
+     */
+    orderBy?: PaymentOrderByWithRelationInput | PaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Payments.
+     */
+    cursor?: PaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Payments.
+     */
+    distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Payment findFirstOrThrow
+   */
+  export type PaymentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which Payment to fetch.
+     */
+    where?: PaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Payments to fetch.
+     */
+    orderBy?: PaymentOrderByWithRelationInput | PaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Payments.
+     */
+    cursor?: PaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Payments.
+     */
+    distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Payment findMany
+   */
+  export type PaymentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which Payments to fetch.
+     */
+    where?: PaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Payments to fetch.
+     */
+    orderBy?: PaymentOrderByWithRelationInput | PaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Payments.
+     */
+    cursor?: PaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Payments.
+     */
+    skip?: number
+    distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Payment create
+   */
+  export type PaymentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Payment.
+     */
+    data: XOR<PaymentCreateInput, PaymentUncheckedCreateInput>
+  }
+
+  /**
+   * Payment createMany
+   */
+  export type PaymentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Payments.
+     */
+    data: PaymentCreateManyInput | PaymentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Payment createManyAndReturn
+   */
+  export type PaymentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Payments.
+     */
+    data: PaymentCreateManyInput | PaymentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Payment update
+   */
+  export type PaymentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Payment.
+     */
+    data: XOR<PaymentUpdateInput, PaymentUncheckedUpdateInput>
+    /**
+     * Choose, which Payment to update.
+     */
+    where: PaymentWhereUniqueInput
+  }
+
+  /**
+   * Payment updateMany
+   */
+  export type PaymentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Payments.
+     */
+    data: XOR<PaymentUpdateManyMutationInput, PaymentUncheckedUpdateManyInput>
+    /**
+     * Filter which Payments to update
+     */
+    where?: PaymentWhereInput
+  }
+
+  /**
+   * Payment upsert
+   */
+  export type PaymentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Payment to update in case it exists.
+     */
+    where: PaymentWhereUniqueInput
+    /**
+     * In case the Payment found by the `where` argument doesn't exist, create a new Payment with this data.
+     */
+    create: XOR<PaymentCreateInput, PaymentUncheckedCreateInput>
+    /**
+     * In case the Payment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PaymentUpdateInput, PaymentUncheckedUpdateInput>
+  }
+
+  /**
+   * Payment delete
+   */
+  export type PaymentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
+     * Filter which Payment to delete.
+     */
+    where: PaymentWhereUniqueInput
+  }
+
+  /**
+   * Payment deleteMany
+   */
+  export type PaymentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Payments to delete
+     */
+    where?: PaymentWhereInput
+  }
+
+  /**
+   * Payment without action
+   */
+  export type PaymentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
   }
 
 
@@ -2977,34 +6211,72 @@ export namespace Prisma {
    * Enums
    */
 
+  export const TransactionIsolationLevel: {
+    ReadUncommitted: 'ReadUncommitted',
+    ReadCommitted: 'ReadCommitted',
+    RepeatableRead: 'RepeatableRead',
+    Serializable: 'Serializable'
+  };
+
+  export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
   export const UserScalarFieldEnum: {
-    id: 'id',
+    user_id: 'user_id',
     email: 'email',
-    first_name: 'first_name',
-    last_name: 'last_name',
-    password: 'password',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    passwordHash: 'passwordHash',
+    githubId: 'githubId',
+    verified: 'verified',
+    personalInfo: 'personalInfo'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-  export const ProfileScalarFieldEnum: {
-    id: 'id',
-    contact: 'contact',
-    city: 'city',
-    gender: 'gender',
-    age: 'age',
-    type: 'type',
-    college: 'college',
-    course_passed: 'course_passed',
-    passing_year: 'passing_year',
-    experience: 'experience',
-    userId: 'userId'
+  export const BootcampScalarFieldEnum: {
+    bootcamp_id: 'bootcamp_id',
+    name: 'name',
+    description: 'description',
+    schedule: 'schedule',
+    dates: 'dates',
+    amount: 'amount',
+    mentors: 'mentors'
   };
 
-  export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeof ProfileScalarFieldEnum]
+  export type BootcampScalarFieldEnum = (typeof BootcampScalarFieldEnum)[keyof typeof BootcampScalarFieldEnum]
+
+
+  export const MentorScalarFieldEnum: {
+    mentor_id: 'mentor_id',
+    name: 'name',
+    bio: 'bio',
+    expertise: 'expertise'
+  };
+
+  export type MentorScalarFieldEnum = (typeof MentorScalarFieldEnum)[keyof typeof MentorScalarFieldEnum]
+
+
+  export const BookingsScalarFieldEnum: {
+    booking_id: 'booking_id',
+    userId: 'userId',
+    bootcampId: 'bootcampId',
+    status: 'status',
+    createdAt: 'createdAt'
+  };
+
+  export type BookingsScalarFieldEnum = (typeof BookingsScalarFieldEnum)[keyof typeof BookingsScalarFieldEnum]
+
+
+  export const PaymentScalarFieldEnum: {
+    payment_id: 'payment_id',
+    bookingId: 'bookingId',
+    amount: 'amount',
+    status: 'status',
+    paymentDetails: 'paymentDetails',
+    createdAt: 'createdAt'
+  };
+
+  export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -3015,6 +6287,21 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -3023,51 +6310,26 @@ export namespace Prisma {
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
   /**
    * Field references 
    */
-
-
-  /**
-   * Reference to a field of type 'String'
-   */
-  export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
-    
-
-
-  /**
-   * Reference to a field of type 'String[]'
-   */
-  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Gender'
-   */
-  export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender'>
-    
-
-
-  /**
-   * Reference to a field of type 'Gender[]'
-   */
-  export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender[]'>
-    
 
 
   /**
@@ -3085,16 +6347,58 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'StudentType'
+   * Reference to a field of type 'String'
    */
-  export type EnumStudentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentType'>
+  export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
     
 
 
   /**
-   * Reference to a field of type 'StudentType[]'
+   * Reference to a field of type 'String[]'
    */
-  export type ListEnumStudentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentType[]'>
+  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
@@ -3119,315 +6423,609 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    id?: StringFilter<"User"> | string
+    user_id?: IntFilter<"User"> | number
     email?: StringFilter<"User"> | string
-    first_name?: StringFilter<"User"> | string
-    last_name?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
-    profile?: XOR<ProfileNullableRelationFilter, ProfileWhereInput> | null
+    passwordHash?: StringFilter<"User"> | string
+    githubId?: StringNullableFilter<"User"> | string | null
+    verified?: BoolFilter<"User"> | boolean
+    personalInfo?: JsonNullableFilter<"User">
+    bookings?: BookingsListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
-    id?: SortOrder
+    user_id?: SortOrder
     email?: SortOrder
-    first_name?: SortOrder
-    last_name?: SortOrder
-    password?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    profile?: ProfileOrderByWithRelationInput
+    passwordHash?: SortOrder
+    githubId?: SortOrderInput | SortOrder
+    verified?: SortOrder
+    personalInfo?: SortOrderInput | SortOrder
+    bookings?: BookingsOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    user_id?: number
     email?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    first_name?: StringFilter<"User"> | string
-    last_name?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
-    profile?: XOR<ProfileNullableRelationFilter, ProfileWhereInput> | null
-  }, "id" | "email">
+    passwordHash?: StringFilter<"User"> | string
+    githubId?: StringNullableFilter<"User"> | string | null
+    verified?: BoolFilter<"User"> | boolean
+    personalInfo?: JsonNullableFilter<"User">
+    bookings?: BookingsListRelationFilter
+  }, "user_id" | "email">
 
   export type UserOrderByWithAggregationInput = {
-    id?: SortOrder
+    user_id?: SortOrder
     email?: SortOrder
-    first_name?: SortOrder
-    last_name?: SortOrder
-    password?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    passwordHash?: SortOrder
+    githubId?: SortOrderInput | SortOrder
+    verified?: SortOrder
+    personalInfo?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
     AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"User"> | string
+    user_id?: IntWithAggregatesFilter<"User"> | number
     email?: StringWithAggregatesFilter<"User"> | string
-    first_name?: StringWithAggregatesFilter<"User"> | string
-    last_name?: StringWithAggregatesFilter<"User"> | string
-    password?: StringWithAggregatesFilter<"User"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    passwordHash?: StringWithAggregatesFilter<"User"> | string
+    githubId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    verified?: BoolWithAggregatesFilter<"User"> | boolean
+    personalInfo?: JsonNullableWithAggregatesFilter<"User">
   }
 
-  export type ProfileWhereInput = {
-    AND?: ProfileWhereInput | ProfileWhereInput[]
-    OR?: ProfileWhereInput[]
-    NOT?: ProfileWhereInput | ProfileWhereInput[]
-    id?: StringFilter<"Profile"> | string
-    contact?: StringFilter<"Profile"> | string
-    city?: StringFilter<"Profile"> | string
-    gender?: EnumGenderFilter<"Profile"> | $Enums.Gender
-    age?: IntFilter<"Profile"> | number
-    type?: EnumStudentTypeFilter<"Profile"> | $Enums.StudentType
-    college?: StringFilter<"Profile"> | string
-    course_passed?: StringFilter<"Profile"> | string
-    passing_year?: IntFilter<"Profile"> | number
-    experience?: IntFilter<"Profile"> | number
-    userId?: StringFilter<"Profile"> | string
+  export type BootcampWhereInput = {
+    AND?: BootcampWhereInput | BootcampWhereInput[]
+    OR?: BootcampWhereInput[]
+    NOT?: BootcampWhereInput | BootcampWhereInput[]
+    bootcamp_id?: IntFilter<"Bootcamp"> | number
+    name?: StringFilter<"Bootcamp"> | string
+    description?: StringNullableFilter<"Bootcamp"> | string | null
+    schedule?: JsonFilter<"Bootcamp">
+    dates?: DateTimeNullableListFilter<"Bootcamp">
+    amount?: IntFilter<"Bootcamp"> | number
+    mentors?: StringFilter<"Bootcamp"> | string
+    bookings?: BookingsListRelationFilter
+  }
+
+  export type BootcampOrderByWithRelationInput = {
+    bootcamp_id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    schedule?: SortOrder
+    dates?: SortOrder
+    amount?: SortOrder
+    mentors?: SortOrder
+    bookings?: BookingsOrderByRelationAggregateInput
+  }
+
+  export type BootcampWhereUniqueInput = Prisma.AtLeast<{
+    bootcamp_id?: number
+    name?: string
+    AND?: BootcampWhereInput | BootcampWhereInput[]
+    OR?: BootcampWhereInput[]
+    NOT?: BootcampWhereInput | BootcampWhereInput[]
+    description?: StringNullableFilter<"Bootcamp"> | string | null
+    schedule?: JsonFilter<"Bootcamp">
+    dates?: DateTimeNullableListFilter<"Bootcamp">
+    amount?: IntFilter<"Bootcamp"> | number
+    mentors?: StringFilter<"Bootcamp"> | string
+    bookings?: BookingsListRelationFilter
+  }, "bootcamp_id" | "name">
+
+  export type BootcampOrderByWithAggregationInput = {
+    bootcamp_id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    schedule?: SortOrder
+    dates?: SortOrder
+    amount?: SortOrder
+    mentors?: SortOrder
+    _count?: BootcampCountOrderByAggregateInput
+    _avg?: BootcampAvgOrderByAggregateInput
+    _max?: BootcampMaxOrderByAggregateInput
+    _min?: BootcampMinOrderByAggregateInput
+    _sum?: BootcampSumOrderByAggregateInput
+  }
+
+  export type BootcampScalarWhereWithAggregatesInput = {
+    AND?: BootcampScalarWhereWithAggregatesInput | BootcampScalarWhereWithAggregatesInput[]
+    OR?: BootcampScalarWhereWithAggregatesInput[]
+    NOT?: BootcampScalarWhereWithAggregatesInput | BootcampScalarWhereWithAggregatesInput[]
+    bootcamp_id?: IntWithAggregatesFilter<"Bootcamp"> | number
+    name?: StringWithAggregatesFilter<"Bootcamp"> | string
+    description?: StringNullableWithAggregatesFilter<"Bootcamp"> | string | null
+    schedule?: JsonWithAggregatesFilter<"Bootcamp">
+    dates?: DateTimeNullableListFilter<"Bootcamp">
+    amount?: IntWithAggregatesFilter<"Bootcamp"> | number
+    mentors?: StringWithAggregatesFilter<"Bootcamp"> | string
+  }
+
+  export type MentorWhereInput = {
+    AND?: MentorWhereInput | MentorWhereInput[]
+    OR?: MentorWhereInput[]
+    NOT?: MentorWhereInput | MentorWhereInput[]
+    mentor_id?: IntFilter<"Mentor"> | number
+    name?: StringFilter<"Mentor"> | string
+    bio?: StringNullableFilter<"Mentor"> | string | null
+    expertise?: StringNullableFilter<"Mentor"> | string | null
+  }
+
+  export type MentorOrderByWithRelationInput = {
+    mentor_id?: SortOrder
+    name?: SortOrder
+    bio?: SortOrderInput | SortOrder
+    expertise?: SortOrderInput | SortOrder
+  }
+
+  export type MentorWhereUniqueInput = Prisma.AtLeast<{
+    mentor_id?: number
+    name?: string
+    AND?: MentorWhereInput | MentorWhereInput[]
+    OR?: MentorWhereInput[]
+    NOT?: MentorWhereInput | MentorWhereInput[]
+    bio?: StringNullableFilter<"Mentor"> | string | null
+    expertise?: StringNullableFilter<"Mentor"> | string | null
+  }, "mentor_id" | "name">
+
+  export type MentorOrderByWithAggregationInput = {
+    mentor_id?: SortOrder
+    name?: SortOrder
+    bio?: SortOrderInput | SortOrder
+    expertise?: SortOrderInput | SortOrder
+    _count?: MentorCountOrderByAggregateInput
+    _avg?: MentorAvgOrderByAggregateInput
+    _max?: MentorMaxOrderByAggregateInput
+    _min?: MentorMinOrderByAggregateInput
+    _sum?: MentorSumOrderByAggregateInput
+  }
+
+  export type MentorScalarWhereWithAggregatesInput = {
+    AND?: MentorScalarWhereWithAggregatesInput | MentorScalarWhereWithAggregatesInput[]
+    OR?: MentorScalarWhereWithAggregatesInput[]
+    NOT?: MentorScalarWhereWithAggregatesInput | MentorScalarWhereWithAggregatesInput[]
+    mentor_id?: IntWithAggregatesFilter<"Mentor"> | number
+    name?: StringWithAggregatesFilter<"Mentor"> | string
+    bio?: StringNullableWithAggregatesFilter<"Mentor"> | string | null
+    expertise?: StringNullableWithAggregatesFilter<"Mentor"> | string | null
+  }
+
+  export type BookingsWhereInput = {
+    AND?: BookingsWhereInput | BookingsWhereInput[]
+    OR?: BookingsWhereInput[]
+    NOT?: BookingsWhereInput | BookingsWhereInput[]
+    booking_id?: IntFilter<"Bookings"> | number
+    userId?: IntFilter<"Bookings"> | number
+    bootcampId?: IntFilter<"Bookings"> | number
+    status?: StringFilter<"Bookings"> | string
+    createdAt?: DateTimeFilter<"Bookings"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
+    bootcamp?: XOR<BootcampRelationFilter, BootcampWhereInput>
+    payment?: PaymentListRelationFilter
   }
 
-  export type ProfileOrderByWithRelationInput = {
-    id?: SortOrder
-    contact?: SortOrder
-    city?: SortOrder
-    gender?: SortOrder
-    age?: SortOrder
-    type?: SortOrder
-    college?: SortOrder
-    course_passed?: SortOrder
-    passing_year?: SortOrder
-    experience?: SortOrder
+  export type BookingsOrderByWithRelationInput = {
+    booking_id?: SortOrder
     userId?: SortOrder
+    bootcampId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
+    bootcamp?: BootcampOrderByWithRelationInput
+    payment?: PaymentOrderByRelationAggregateInput
   }
 
-  export type ProfileWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    userId?: string
-    AND?: ProfileWhereInput | ProfileWhereInput[]
-    OR?: ProfileWhereInput[]
-    NOT?: ProfileWhereInput | ProfileWhereInput[]
-    contact?: StringFilter<"Profile"> | string
-    city?: StringFilter<"Profile"> | string
-    gender?: EnumGenderFilter<"Profile"> | $Enums.Gender
-    age?: IntFilter<"Profile"> | number
-    type?: EnumStudentTypeFilter<"Profile"> | $Enums.StudentType
-    college?: StringFilter<"Profile"> | string
-    course_passed?: StringFilter<"Profile"> | string
-    passing_year?: IntFilter<"Profile"> | number
-    experience?: IntFilter<"Profile"> | number
+  export type BookingsWhereUniqueInput = Prisma.AtLeast<{
+    booking_id?: number
+    AND?: BookingsWhereInput | BookingsWhereInput[]
+    OR?: BookingsWhereInput[]
+    NOT?: BookingsWhereInput | BookingsWhereInput[]
+    userId?: IntFilter<"Bookings"> | number
+    bootcampId?: IntFilter<"Bookings"> | number
+    status?: StringFilter<"Bookings"> | string
+    createdAt?: DateTimeFilter<"Bookings"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
-  }, "id" | "userId">
+    bootcamp?: XOR<BootcampRelationFilter, BootcampWhereInput>
+    payment?: PaymentListRelationFilter
+  }, "booking_id">
 
-  export type ProfileOrderByWithAggregationInput = {
-    id?: SortOrder
-    contact?: SortOrder
-    city?: SortOrder
-    gender?: SortOrder
-    age?: SortOrder
-    type?: SortOrder
-    college?: SortOrder
-    course_passed?: SortOrder
-    passing_year?: SortOrder
-    experience?: SortOrder
+  export type BookingsOrderByWithAggregationInput = {
+    booking_id?: SortOrder
     userId?: SortOrder
-    _count?: ProfileCountOrderByAggregateInput
-    _avg?: ProfileAvgOrderByAggregateInput
-    _max?: ProfileMaxOrderByAggregateInput
-    _min?: ProfileMinOrderByAggregateInput
-    _sum?: ProfileSumOrderByAggregateInput
+    bootcampId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    _count?: BookingsCountOrderByAggregateInput
+    _avg?: BookingsAvgOrderByAggregateInput
+    _max?: BookingsMaxOrderByAggregateInput
+    _min?: BookingsMinOrderByAggregateInput
+    _sum?: BookingsSumOrderByAggregateInput
   }
 
-  export type ProfileScalarWhereWithAggregatesInput = {
-    AND?: ProfileScalarWhereWithAggregatesInput | ProfileScalarWhereWithAggregatesInput[]
-    OR?: ProfileScalarWhereWithAggregatesInput[]
-    NOT?: ProfileScalarWhereWithAggregatesInput | ProfileScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Profile"> | string
-    contact?: StringWithAggregatesFilter<"Profile"> | string
-    city?: StringWithAggregatesFilter<"Profile"> | string
-    gender?: EnumGenderWithAggregatesFilter<"Profile"> | $Enums.Gender
-    age?: IntWithAggregatesFilter<"Profile"> | number
-    type?: EnumStudentTypeWithAggregatesFilter<"Profile"> | $Enums.StudentType
-    college?: StringWithAggregatesFilter<"Profile"> | string
-    course_passed?: StringWithAggregatesFilter<"Profile"> | string
-    passing_year?: IntWithAggregatesFilter<"Profile"> | number
-    experience?: IntWithAggregatesFilter<"Profile"> | number
-    userId?: StringWithAggregatesFilter<"Profile"> | string
+  export type BookingsScalarWhereWithAggregatesInput = {
+    AND?: BookingsScalarWhereWithAggregatesInput | BookingsScalarWhereWithAggregatesInput[]
+    OR?: BookingsScalarWhereWithAggregatesInput[]
+    NOT?: BookingsScalarWhereWithAggregatesInput | BookingsScalarWhereWithAggregatesInput[]
+    booking_id?: IntWithAggregatesFilter<"Bookings"> | number
+    userId?: IntWithAggregatesFilter<"Bookings"> | number
+    bootcampId?: IntWithAggregatesFilter<"Bookings"> | number
+    status?: StringWithAggregatesFilter<"Bookings"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Bookings"> | Date | string
+  }
+
+  export type PaymentWhereInput = {
+    AND?: PaymentWhereInput | PaymentWhereInput[]
+    OR?: PaymentWhereInput[]
+    NOT?: PaymentWhereInput | PaymentWhereInput[]
+    payment_id?: IntFilter<"Payment"> | number
+    bookingId?: IntFilter<"Payment"> | number
+    amount?: DecimalFilter<"Payment"> | Decimal | DecimalJsLike | number | string
+    status?: StringFilter<"Payment"> | string
+    paymentDetails?: JsonFilter<"Payment">
+    createdAt?: DateTimeFilter<"Payment"> | Date | string
+    booking?: XOR<BookingsRelationFilter, BookingsWhereInput>
+  }
+
+  export type PaymentOrderByWithRelationInput = {
+    payment_id?: SortOrder
+    bookingId?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    paymentDetails?: SortOrder
+    createdAt?: SortOrder
+    booking?: BookingsOrderByWithRelationInput
+  }
+
+  export type PaymentWhereUniqueInput = Prisma.AtLeast<{
+    payment_id?: number
+    AND?: PaymentWhereInput | PaymentWhereInput[]
+    OR?: PaymentWhereInput[]
+    NOT?: PaymentWhereInput | PaymentWhereInput[]
+    bookingId?: IntFilter<"Payment"> | number
+    amount?: DecimalFilter<"Payment"> | Decimal | DecimalJsLike | number | string
+    status?: StringFilter<"Payment"> | string
+    paymentDetails?: JsonFilter<"Payment">
+    createdAt?: DateTimeFilter<"Payment"> | Date | string
+    booking?: XOR<BookingsRelationFilter, BookingsWhereInput>
+  }, "payment_id">
+
+  export type PaymentOrderByWithAggregationInput = {
+    payment_id?: SortOrder
+    bookingId?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    paymentDetails?: SortOrder
+    createdAt?: SortOrder
+    _count?: PaymentCountOrderByAggregateInput
+    _avg?: PaymentAvgOrderByAggregateInput
+    _max?: PaymentMaxOrderByAggregateInput
+    _min?: PaymentMinOrderByAggregateInput
+    _sum?: PaymentSumOrderByAggregateInput
+  }
+
+  export type PaymentScalarWhereWithAggregatesInput = {
+    AND?: PaymentScalarWhereWithAggregatesInput | PaymentScalarWhereWithAggregatesInput[]
+    OR?: PaymentScalarWhereWithAggregatesInput[]
+    NOT?: PaymentScalarWhereWithAggregatesInput | PaymentScalarWhereWithAggregatesInput[]
+    payment_id?: IntWithAggregatesFilter<"Payment"> | number
+    bookingId?: IntWithAggregatesFilter<"Payment"> | number
+    amount?: DecimalWithAggregatesFilter<"Payment"> | Decimal | DecimalJsLike | number | string
+    status?: StringWithAggregatesFilter<"Payment"> | string
+    paymentDetails?: JsonWithAggregatesFilter<"Payment">
+    createdAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
   }
 
   export type UserCreateInput = {
-    id?: string
     email: string
-    first_name: string
-    last_name: string
-    password: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    profile?: ProfileCreateNestedOneWithoutUserInput
+    passwordHash: string
+    githubId?: string | null
+    verified?: boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
+    bookings?: BookingsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
-    id?: string
+    user_id?: number
     email: string
-    first_name: string
-    last_name: string
-    password: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
+    passwordHash: string
+    githubId?: string | null
+    verified?: boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
+    bookings?: BookingsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
     email?: StringFieldUpdateOperationsInput | string
-    first_name?: StringFieldUpdateOperationsInput | string
-    last_name?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    profile?: ProfileUpdateOneWithoutUserNestedInput
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    githubId?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
+    bookings?: BookingsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
-    first_name?: StringFieldUpdateOperationsInput | string
-    last_name?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    githubId?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
+    bookings?: BookingsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
-    id?: string
+    user_id?: number
     email: string
-    first_name: string
-    last_name: string
-    password: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    passwordHash: string
+    githubId?: string | null
+    verified?: boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUpdateManyMutationInput = {
     email?: StringFieldUpdateOperationsInput | string
-    first_name?: StringFieldUpdateOperationsInput | string
-    last_name?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    githubId?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUncheckedUpdateManyInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
-    first_name?: StringFieldUpdateOperationsInput | string
-    last_name?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    githubId?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type BootcampCreateInput = {
+    name: string
+    description?: string | null
+    schedule: JsonNullValueInput | InputJsonValue
+    dates?: BootcampCreatedatesInput | Date[] | string[]
+    amount: number
+    mentors: string
+    bookings?: BookingsCreateNestedManyWithoutBootcampInput
+  }
+
+  export type BootcampUncheckedCreateInput = {
+    bootcamp_id?: number
+    name: string
+    description?: string | null
+    schedule: JsonNullValueInput | InputJsonValue
+    dates?: BootcampCreatedatesInput | Date[] | string[]
+    amount: number
+    mentors: string
+    bookings?: BookingsUncheckedCreateNestedManyWithoutBootcampInput
+  }
+
+  export type BootcampUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: JsonNullValueInput | InputJsonValue
+    dates?: BootcampUpdatedatesInput | Date[] | string[]
+    amount?: IntFieldUpdateOperationsInput | number
+    mentors?: StringFieldUpdateOperationsInput | string
+    bookings?: BookingsUpdateManyWithoutBootcampNestedInput
+  }
+
+  export type BootcampUncheckedUpdateInput = {
+    bootcamp_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: JsonNullValueInput | InputJsonValue
+    dates?: BootcampUpdatedatesInput | Date[] | string[]
+    amount?: IntFieldUpdateOperationsInput | number
+    mentors?: StringFieldUpdateOperationsInput | string
+    bookings?: BookingsUncheckedUpdateManyWithoutBootcampNestedInput
+  }
+
+  export type BootcampCreateManyInput = {
+    bootcamp_id?: number
+    name: string
+    description?: string | null
+    schedule: JsonNullValueInput | InputJsonValue
+    dates?: BootcampCreatedatesInput | Date[] | string[]
+    amount: number
+    mentors: string
+  }
+
+  export type BootcampUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: JsonNullValueInput | InputJsonValue
+    dates?: BootcampUpdatedatesInput | Date[] | string[]
+    amount?: IntFieldUpdateOperationsInput | number
+    mentors?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BootcampUncheckedUpdateManyInput = {
+    bootcamp_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: JsonNullValueInput | InputJsonValue
+    dates?: BootcampUpdatedatesInput | Date[] | string[]
+    amount?: IntFieldUpdateOperationsInput | number
+    mentors?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type MentorCreateInput = {
+    name: string
+    bio?: string | null
+    expertise?: string | null
+  }
+
+  export type MentorUncheckedCreateInput = {
+    mentor_id?: number
+    name: string
+    bio?: string | null
+    expertise?: string | null
+  }
+
+  export type MentorUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MentorUncheckedUpdateInput = {
+    mentor_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MentorCreateManyInput = {
+    mentor_id?: number
+    name: string
+    bio?: string | null
+    expertise?: string | null
+  }
+
+  export type MentorUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MentorUncheckedUpdateManyInput = {
+    mentor_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type BookingsCreateInput = {
+    status: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutBookingsInput
+    bootcamp: BootcampCreateNestedOneWithoutBookingsInput
+    payment?: PaymentCreateNestedManyWithoutBookingInput
+  }
+
+  export type BookingsUncheckedCreateInput = {
+    booking_id?: number
+    userId: number
+    bootcampId: number
+    status: string
+    createdAt?: Date | string
+    payment?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+  }
+
+  export type BookingsUpdateInput = {
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBookingsNestedInput
+    bootcamp?: BootcampUpdateOneRequiredWithoutBookingsNestedInput
+    payment?: PaymentUpdateManyWithoutBookingNestedInput
   }
 
-  export type ProfileCreateInput = {
-    id?: string
-    contact: string
-    city: string
-    gender: $Enums.Gender
-    age: number
-    type: $Enums.StudentType
-    college: string
-    course_passed: string
-    passing_year: number
-    experience: number
-    user: UserCreateNestedOneWithoutProfileInput
+  export type BookingsUncheckedUpdateInput = {
+    booking_id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    bootcampId?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
   }
 
-  export type ProfileUncheckedCreateInput = {
-    id?: string
-    contact: string
-    city: string
-    gender: $Enums.Gender
-    age: number
-    type: $Enums.StudentType
-    college: string
-    course_passed: string
-    passing_year: number
-    experience: number
-    userId: string
+  export type BookingsCreateManyInput = {
+    booking_id?: number
+    userId: number
+    bootcampId: number
+    status: string
+    createdAt?: Date | string
   }
 
-  export type ProfileUpdateInput = {
-    contact?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-    age?: IntFieldUpdateOperationsInput | number
-    type?: EnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType
-    college?: StringFieldUpdateOperationsInput | string
-    course_passed?: StringFieldUpdateOperationsInput | string
-    passing_year?: IntFieldUpdateOperationsInput | number
-    experience?: IntFieldUpdateOperationsInput | number
-    user?: UserUpdateOneRequiredWithoutProfileNestedInput
+  export type BookingsUpdateManyMutationInput = {
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProfileUncheckedUpdateInput = {
-    contact?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-    age?: IntFieldUpdateOperationsInput | number
-    type?: EnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType
-    college?: StringFieldUpdateOperationsInput | string
-    course_passed?: StringFieldUpdateOperationsInput | string
-    passing_year?: IntFieldUpdateOperationsInput | number
-    experience?: IntFieldUpdateOperationsInput | number
-    userId?: StringFieldUpdateOperationsInput | string
+  export type BookingsUncheckedUpdateManyInput = {
+    booking_id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    bootcampId?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProfileCreateManyInput = {
-    id?: string
-    contact: string
-    city: string
-    gender: $Enums.Gender
-    age: number
-    type: $Enums.StudentType
-    college: string
-    course_passed: string
-    passing_year: number
-    experience: number
-    userId: string
+  export type PaymentCreateInput = {
+    amount: Decimal | DecimalJsLike | number | string
+    status: string
+    paymentDetails: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    booking: BookingsCreateNestedOneWithoutPaymentInput
   }
 
-  export type ProfileUpdateManyMutationInput = {
-    contact?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-    age?: IntFieldUpdateOperationsInput | number
-    type?: EnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType
-    college?: StringFieldUpdateOperationsInput | string
-    course_passed?: StringFieldUpdateOperationsInput | string
-    passing_year?: IntFieldUpdateOperationsInput | number
-    experience?: IntFieldUpdateOperationsInput | number
+  export type PaymentUncheckedCreateInput = {
+    payment_id?: number
+    bookingId: number
+    amount: Decimal | DecimalJsLike | number | string
+    status: string
+    paymentDetails: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
   }
 
-  export type ProfileUncheckedUpdateManyInput = {
-    contact?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-    age?: IntFieldUpdateOperationsInput | number
-    type?: EnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType
-    college?: StringFieldUpdateOperationsInput | string
-    course_passed?: StringFieldUpdateOperationsInput | string
-    passing_year?: IntFieldUpdateOperationsInput | number
-    experience?: IntFieldUpdateOperationsInput | number
-    userId?: StringFieldUpdateOperationsInput | string
+  export type PaymentUpdateInput = {
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    paymentDetails?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    booking?: BookingsUpdateOneRequiredWithoutPaymentNestedInput
+  }
+
+  export type PaymentUncheckedUpdateInput = {
+    payment_id?: IntFieldUpdateOperationsInput | number
+    bookingId?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    paymentDetails?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentCreateManyInput = {
+    payment_id?: number
+    bookingId: number
+    amount: Decimal | DecimalJsLike | number | string
+    status: string
+    paymentDetails: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type PaymentUpdateManyMutationInput = {
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    paymentDetails?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentUncheckedUpdateManyInput = {
+    payment_id?: IntFieldUpdateOperationsInput | number
+    bookingId?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    paymentDetails?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -3445,50 +7043,110 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type ProfileNullableRelationFilter = {
-    is?: ProfileWhereInput | null
-    isNot?: ProfileWhereInput | null
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+  export type JsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type BookingsListRelationFilter = {
+    every?: BookingsWhereInput
+    some?: BookingsWhereInput
+    none?: BookingsWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type BookingsOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
-    id?: SortOrder
+    user_id?: SortOrder
     email?: SortOrder
-    first_name?: SortOrder
-    last_name?: SortOrder
-    password?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    passwordHash?: SortOrder
+    githubId?: SortOrder
+    verified?: SortOrder
+    personalInfo?: SortOrder
+  }
+
+  export type UserAvgOrderByAggregateInput = {
+    user_id?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
-    id?: SortOrder
+    user_id?: SortOrder
     email?: SortOrder
-    first_name?: SortOrder
-    last_name?: SortOrder
-    password?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    passwordHash?: SortOrder
+    githubId?: SortOrder
+    verified?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
-    id?: SortOrder
+    user_id?: SortOrder
     email?: SortOrder
-    first_name?: SortOrder
-    last_name?: SortOrder
-    password?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    passwordHash?: SortOrder
+    githubId?: SortOrder
+    verified?: SortOrder
+  }
+
+  export type UserSumOrderByAggregateInput = {
+    user_id?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -3509,6 +7167,244 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+  export type JsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type DateTimeNullableListFilter<$PrismaModel = never> = {
+    equals?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    has?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    hasEvery?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    hasSome?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type BootcampCountOrderByAggregateInput = {
+    bootcamp_id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    schedule?: SortOrder
+    dates?: SortOrder
+    amount?: SortOrder
+    mentors?: SortOrder
+  }
+
+  export type BootcampAvgOrderByAggregateInput = {
+    bootcamp_id?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type BootcampMaxOrderByAggregateInput = {
+    bootcamp_id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    amount?: SortOrder
+    mentors?: SortOrder
+  }
+
+  export type BootcampMinOrderByAggregateInput = {
+    bootcamp_id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    amount?: SortOrder
+    mentors?: SortOrder
+  }
+
+  export type BootcampSumOrderByAggregateInput = {
+    bootcamp_id?: SortOrder
+    amount?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type MentorCountOrderByAggregateInput = {
+    mentor_id?: SortOrder
+    name?: SortOrder
+    bio?: SortOrder
+    expertise?: SortOrder
+  }
+
+  export type MentorAvgOrderByAggregateInput = {
+    mentor_id?: SortOrder
+  }
+
+  export type MentorMaxOrderByAggregateInput = {
+    mentor_id?: SortOrder
+    name?: SortOrder
+    bio?: SortOrder
+    expertise?: SortOrder
+  }
+
+  export type MentorMinOrderByAggregateInput = {
+    mentor_id?: SortOrder
+    name?: SortOrder
+    bio?: SortOrder
+    expertise?: SortOrder
+  }
+
+  export type MentorSumOrderByAggregateInput = {
+    mentor_id?: SortOrder
+  }
+
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type UserRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type BootcampRelationFilter = {
+    is?: BootcampWhereInput
+    isNot?: BootcampWhereInput
+  }
+
+  export type PaymentListRelationFilter = {
+    every?: PaymentWhereInput
+    some?: PaymentWhereInput
+    none?: PaymentWhereInput
+  }
+
+  export type PaymentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BookingsCountOrderByAggregateInput = {
+    booking_id?: SortOrder
+    userId?: SortOrder
+    bootcampId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BookingsAvgOrderByAggregateInput = {
+    booking_id?: SortOrder
+    userId?: SortOrder
+    bootcampId?: SortOrder
+  }
+
+  export type BookingsMaxOrderByAggregateInput = {
+    booking_id?: SortOrder
+    userId?: SortOrder
+    bootcampId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BookingsMinOrderByAggregateInput = {
+    booking_id?: SortOrder
+    userId?: SortOrder
+    bootcampId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BookingsSumOrderByAggregateInput = {
+    booking_id?: SortOrder
+    userId?: SortOrder
+    bootcampId?: SortOrder
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -3523,174 +7419,113 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type EnumGenderFilter<$PrismaModel = never> = {
-    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
-    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    not?: NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+  export type BookingsRelationFilter = {
+    is?: BookingsWhereInput
+    isNot?: BookingsWhereInput
   }
 
-  export type EnumStudentTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentType | EnumStudentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentTypeFilter<$PrismaModel> | $Enums.StudentType
+  export type PaymentCountOrderByAggregateInput = {
+    payment_id?: SortOrder
+    bookingId?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    paymentDetails?: SortOrder
+    createdAt?: SortOrder
   }
 
-  export type UserRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
+  export type PaymentAvgOrderByAggregateInput = {
+    payment_id?: SortOrder
+    bookingId?: SortOrder
+    amount?: SortOrder
   }
 
-  export type ProfileCountOrderByAggregateInput = {
-    id?: SortOrder
-    contact?: SortOrder
-    city?: SortOrder
-    gender?: SortOrder
-    age?: SortOrder
-    type?: SortOrder
-    college?: SortOrder
-    course_passed?: SortOrder
-    passing_year?: SortOrder
-    experience?: SortOrder
-    userId?: SortOrder
+  export type PaymentMaxOrderByAggregateInput = {
+    payment_id?: SortOrder
+    bookingId?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
   }
 
-  export type ProfileAvgOrderByAggregateInput = {
-    age?: SortOrder
-    passing_year?: SortOrder
-    experience?: SortOrder
+  export type PaymentMinOrderByAggregateInput = {
+    payment_id?: SortOrder
+    bookingId?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
   }
 
-  export type ProfileMaxOrderByAggregateInput = {
-    id?: SortOrder
-    contact?: SortOrder
-    city?: SortOrder
-    gender?: SortOrder
-    age?: SortOrder
-    type?: SortOrder
-    college?: SortOrder
-    course_passed?: SortOrder
-    passing_year?: SortOrder
-    experience?: SortOrder
-    userId?: SortOrder
+  export type PaymentSumOrderByAggregateInput = {
+    payment_id?: SortOrder
+    bookingId?: SortOrder
+    amount?: SortOrder
   }
 
-  export type ProfileMinOrderByAggregateInput = {
-    id?: SortOrder
-    contact?: SortOrder
-    city?: SortOrder
-    gender?: SortOrder
-    age?: SortOrder
-    type?: SortOrder
-    college?: SortOrder
-    course_passed?: SortOrder
-    passing_year?: SortOrder
-    experience?: SortOrder
-    userId?: SortOrder
-  }
-
-  export type ProfileSumOrderByAggregateInput = {
-    age?: SortOrder
-    passing_year?: SortOrder
-    experience?: SortOrder
-  }
-
-  export type EnumGenderWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
-    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    not?: NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumGenderFilter<$PrismaModel>
-    _max?: NestedEnumGenderFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
+  export type BookingsCreateNestedManyWithoutUserInput = {
+    create?: XOR<BookingsCreateWithoutUserInput, BookingsUncheckedCreateWithoutUserInput> | BookingsCreateWithoutUserInput[] | BookingsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookingsCreateOrConnectWithoutUserInput | BookingsCreateOrConnectWithoutUserInput[]
+    createMany?: BookingsCreateManyUserInputEnvelope
+    connect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
   }
 
-  export type EnumStudentTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentType | EnumStudentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentTypeWithAggregatesFilter<$PrismaModel> | $Enums.StudentType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStudentTypeFilter<$PrismaModel>
-    _max?: NestedEnumStudentTypeFilter<$PrismaModel>
-  }
-
-  export type ProfileCreateNestedOneWithoutUserInput = {
-    create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
-    connect?: ProfileWhereUniqueInput
-  }
-
-  export type ProfileUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
-    connect?: ProfileWhereUniqueInput
+  export type BookingsUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<BookingsCreateWithoutUserInput, BookingsUncheckedCreateWithoutUserInput> | BookingsCreateWithoutUserInput[] | BookingsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookingsCreateOrConnectWithoutUserInput | BookingsCreateOrConnectWithoutUserInput[]
+    createMany?: BookingsCreateManyUserInputEnvelope
+    connect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
-  export type ProfileUpdateOneWithoutUserNestedInput = {
-    create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
-    upsert?: ProfileUpsertWithoutUserInput
-    disconnect?: ProfileWhereInput | boolean
-    delete?: ProfileWhereInput | boolean
-    connect?: ProfileWhereUniqueInput
-    update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutUserInput, ProfileUpdateWithoutUserInput>, ProfileUncheckedUpdateWithoutUserInput>
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
-  export type ProfileUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
-    upsert?: ProfileUpsertWithoutUserInput
-    disconnect?: ProfileWhereInput | boolean
-    delete?: ProfileWhereInput | boolean
-    connect?: ProfileWhereUniqueInput
-    update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutUserInput, ProfileUpdateWithoutUserInput>, ProfileUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserCreateNestedOneWithoutProfileInput = {
-    create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
-    connectOrCreate?: UserCreateOrConnectWithoutProfileInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type EnumGenderFieldUpdateOperationsInput = {
-    set?: $Enums.Gender
+  export type BookingsUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BookingsCreateWithoutUserInput, BookingsUncheckedCreateWithoutUserInput> | BookingsCreateWithoutUserInput[] | BookingsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookingsCreateOrConnectWithoutUserInput | BookingsCreateOrConnectWithoutUserInput[]
+    upsert?: BookingsUpsertWithWhereUniqueWithoutUserInput | BookingsUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BookingsCreateManyUserInputEnvelope
+    set?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    disconnect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    delete?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    connect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    update?: BookingsUpdateWithWhereUniqueWithoutUserInput | BookingsUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BookingsUpdateManyWithWhereWithoutUserInput | BookingsUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BookingsScalarWhereInput | BookingsScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -3701,16 +7536,176 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type EnumStudentTypeFieldUpdateOperationsInput = {
-    set?: $Enums.StudentType
+  export type BookingsUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BookingsCreateWithoutUserInput, BookingsUncheckedCreateWithoutUserInput> | BookingsCreateWithoutUserInput[] | BookingsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookingsCreateOrConnectWithoutUserInput | BookingsCreateOrConnectWithoutUserInput[]
+    upsert?: BookingsUpsertWithWhereUniqueWithoutUserInput | BookingsUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BookingsCreateManyUserInputEnvelope
+    set?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    disconnect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    delete?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    connect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    update?: BookingsUpdateWithWhereUniqueWithoutUserInput | BookingsUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BookingsUpdateManyWithWhereWithoutUserInput | BookingsUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BookingsScalarWhereInput | BookingsScalarWhereInput[]
   }
 
-  export type UserUpdateOneRequiredWithoutProfileNestedInput = {
-    create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
-    connectOrCreate?: UserCreateOrConnectWithoutProfileInput
-    upsert?: UserUpsertWithoutProfileInput
+  export type BootcampCreatedatesInput = {
+    set: Date[] | string[]
+  }
+
+  export type BookingsCreateNestedManyWithoutBootcampInput = {
+    create?: XOR<BookingsCreateWithoutBootcampInput, BookingsUncheckedCreateWithoutBootcampInput> | BookingsCreateWithoutBootcampInput[] | BookingsUncheckedCreateWithoutBootcampInput[]
+    connectOrCreate?: BookingsCreateOrConnectWithoutBootcampInput | BookingsCreateOrConnectWithoutBootcampInput[]
+    createMany?: BookingsCreateManyBootcampInputEnvelope
+    connect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+  }
+
+  export type BookingsUncheckedCreateNestedManyWithoutBootcampInput = {
+    create?: XOR<BookingsCreateWithoutBootcampInput, BookingsUncheckedCreateWithoutBootcampInput> | BookingsCreateWithoutBootcampInput[] | BookingsUncheckedCreateWithoutBootcampInput[]
+    connectOrCreate?: BookingsCreateOrConnectWithoutBootcampInput | BookingsCreateOrConnectWithoutBootcampInput[]
+    createMany?: BookingsCreateManyBootcampInputEnvelope
+    connect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+  }
+
+  export type BootcampUpdatedatesInput = {
+    set?: Date[] | string[]
+    push?: Date | string | Date[] | string[]
+  }
+
+  export type BookingsUpdateManyWithoutBootcampNestedInput = {
+    create?: XOR<BookingsCreateWithoutBootcampInput, BookingsUncheckedCreateWithoutBootcampInput> | BookingsCreateWithoutBootcampInput[] | BookingsUncheckedCreateWithoutBootcampInput[]
+    connectOrCreate?: BookingsCreateOrConnectWithoutBootcampInput | BookingsCreateOrConnectWithoutBootcampInput[]
+    upsert?: BookingsUpsertWithWhereUniqueWithoutBootcampInput | BookingsUpsertWithWhereUniqueWithoutBootcampInput[]
+    createMany?: BookingsCreateManyBootcampInputEnvelope
+    set?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    disconnect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    delete?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    connect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    update?: BookingsUpdateWithWhereUniqueWithoutBootcampInput | BookingsUpdateWithWhereUniqueWithoutBootcampInput[]
+    updateMany?: BookingsUpdateManyWithWhereWithoutBootcampInput | BookingsUpdateManyWithWhereWithoutBootcampInput[]
+    deleteMany?: BookingsScalarWhereInput | BookingsScalarWhereInput[]
+  }
+
+  export type BookingsUncheckedUpdateManyWithoutBootcampNestedInput = {
+    create?: XOR<BookingsCreateWithoutBootcampInput, BookingsUncheckedCreateWithoutBootcampInput> | BookingsCreateWithoutBootcampInput[] | BookingsUncheckedCreateWithoutBootcampInput[]
+    connectOrCreate?: BookingsCreateOrConnectWithoutBootcampInput | BookingsCreateOrConnectWithoutBootcampInput[]
+    upsert?: BookingsUpsertWithWhereUniqueWithoutBootcampInput | BookingsUpsertWithWhereUniqueWithoutBootcampInput[]
+    createMany?: BookingsCreateManyBootcampInputEnvelope
+    set?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    disconnect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    delete?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    connect?: BookingsWhereUniqueInput | BookingsWhereUniqueInput[]
+    update?: BookingsUpdateWithWhereUniqueWithoutBootcampInput | BookingsUpdateWithWhereUniqueWithoutBootcampInput[]
+    updateMany?: BookingsUpdateManyWithWhereWithoutBootcampInput | BookingsUpdateManyWithWhereWithoutBootcampInput[]
+    deleteMany?: BookingsScalarWhereInput | BookingsScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutBookingsInput = {
+    create?: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBookingsInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProfileInput, UserUpdateWithoutProfileInput>, UserUncheckedUpdateWithoutProfileInput>
+  }
+
+  export type BootcampCreateNestedOneWithoutBookingsInput = {
+    create?: XOR<BootcampCreateWithoutBookingsInput, BootcampUncheckedCreateWithoutBookingsInput>
+    connectOrCreate?: BootcampCreateOrConnectWithoutBookingsInput
+    connect?: BootcampWhereUniqueInput
+  }
+
+  export type PaymentCreateNestedManyWithoutBookingInput = {
+    create?: XOR<PaymentCreateWithoutBookingInput, PaymentUncheckedCreateWithoutBookingInput> | PaymentCreateWithoutBookingInput[] | PaymentUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: PaymentCreateOrConnectWithoutBookingInput | PaymentCreateOrConnectWithoutBookingInput[]
+    createMany?: PaymentCreateManyBookingInputEnvelope
+    connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+  }
+
+  export type PaymentUncheckedCreateNestedManyWithoutBookingInput = {
+    create?: XOR<PaymentCreateWithoutBookingInput, PaymentUncheckedCreateWithoutBookingInput> | PaymentCreateWithoutBookingInput[] | PaymentUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: PaymentCreateOrConnectWithoutBookingInput | PaymentCreateOrConnectWithoutBookingInput[]
+    createMany?: PaymentCreateManyBookingInputEnvelope
+    connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type UserUpdateOneRequiredWithoutBookingsNestedInput = {
+    create?: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBookingsInput
+    upsert?: UserUpsertWithoutBookingsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBookingsInput, UserUpdateWithoutBookingsInput>, UserUncheckedUpdateWithoutBookingsInput>
+  }
+
+  export type BootcampUpdateOneRequiredWithoutBookingsNestedInput = {
+    create?: XOR<BootcampCreateWithoutBookingsInput, BootcampUncheckedCreateWithoutBookingsInput>
+    connectOrCreate?: BootcampCreateOrConnectWithoutBookingsInput
+    upsert?: BootcampUpsertWithoutBookingsInput
+    connect?: BootcampWhereUniqueInput
+    update?: XOR<XOR<BootcampUpdateToOneWithWhereWithoutBookingsInput, BootcampUpdateWithoutBookingsInput>, BootcampUncheckedUpdateWithoutBookingsInput>
+  }
+
+  export type PaymentUpdateManyWithoutBookingNestedInput = {
+    create?: XOR<PaymentCreateWithoutBookingInput, PaymentUncheckedCreateWithoutBookingInput> | PaymentCreateWithoutBookingInput[] | PaymentUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: PaymentCreateOrConnectWithoutBookingInput | PaymentCreateOrConnectWithoutBookingInput[]
+    upsert?: PaymentUpsertWithWhereUniqueWithoutBookingInput | PaymentUpsertWithWhereUniqueWithoutBookingInput[]
+    createMany?: PaymentCreateManyBookingInputEnvelope
+    set?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+    disconnect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+    delete?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+    connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+    update?: PaymentUpdateWithWhereUniqueWithoutBookingInput | PaymentUpdateWithWhereUniqueWithoutBookingInput[]
+    updateMany?: PaymentUpdateManyWithWhereWithoutBookingInput | PaymentUpdateManyWithWhereWithoutBookingInput[]
+    deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
+  }
+
+  export type PaymentUncheckedUpdateManyWithoutBookingNestedInput = {
+    create?: XOR<PaymentCreateWithoutBookingInput, PaymentUncheckedCreateWithoutBookingInput> | PaymentCreateWithoutBookingInput[] | PaymentUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: PaymentCreateOrConnectWithoutBookingInput | PaymentCreateOrConnectWithoutBookingInput[]
+    upsert?: PaymentUpsertWithWhereUniqueWithoutBookingInput | PaymentUpsertWithWhereUniqueWithoutBookingInput[]
+    createMany?: PaymentCreateManyBookingInputEnvelope
+    set?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+    disconnect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+    delete?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+    connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+    update?: PaymentUpdateWithWhereUniqueWithoutBookingInput | PaymentUpdateWithWhereUniqueWithoutBookingInput[]
+    updateMany?: PaymentUpdateManyWithWhereWithoutBookingInput | PaymentUpdateManyWithWhereWithoutBookingInput[]
+    deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
+  }
+
+  export type BookingsCreateNestedOneWithoutPaymentInput = {
+    create?: XOR<BookingsCreateWithoutPaymentInput, BookingsUncheckedCreateWithoutPaymentInput>
+    connectOrCreate?: BookingsCreateOrConnectWithoutPaymentInput
+    connect?: BookingsWhereUniqueInput
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type BookingsUpdateOneRequiredWithoutPaymentNestedInput = {
+    create?: XOR<BookingsCreateWithoutPaymentInput, BookingsUncheckedCreateWithoutPaymentInput>
+    connectOrCreate?: BookingsCreateOrConnectWithoutPaymentInput
+    upsert?: BookingsUpsertWithoutPaymentInput
+    connect?: BookingsWhereUniqueInput
+    update?: XOR<XOR<BookingsUpdateToOneWithWhereWithoutPaymentInput, BookingsUpdateWithoutPaymentInput>, BookingsUncheckedUpdateWithoutPaymentInput>
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -3727,21 +7722,10 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -3749,59 +7733,12 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedEnumGenderFilter<$PrismaModel = never> = {
-    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
-    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    not?: NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
-  }
-
-  export type NestedEnumStudentTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentType | EnumStudentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentTypeFilter<$PrismaModel> | $Enums.StudentType
-  }
-
-  export type NestedEnumGenderWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
-    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    not?: NestedEnumGenderWithAggregatesFilter<$PrismaModel> | $Enums.Gender
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumGenderFilter<$PrismaModel>
-    _max?: NestedEnumGenderFilter<$PrismaModel>
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -3831,134 +7768,538 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedEnumStudentTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentType | EnumStudentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentTypeWithAggregatesFilter<$PrismaModel> | $Enums.StudentType
+  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStudentTypeFilter<$PrismaModel>
-    _max?: NestedEnumStudentTypeFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type ProfileCreateWithoutUserInput = {
-    id?: string
-    contact: string
-    city: string
-    gender: $Enums.Gender
-    age: number
-    type: $Enums.StudentType
-    college: string
-    course_passed: string
-    passing_year: number
-    experience: number
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type ProfileUncheckedCreateWithoutUserInput = {
-    id?: string
-    contact: string
-    city: string
-    gender: $Enums.Gender
-    age: number
-    type: $Enums.StudentType
-    college: string
-    course_passed: string
-    passing_year: number
-    experience: number
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type ProfileCreateOrConnectWithoutUserInput = {
-    where: ProfileWhereUniqueInput
-    create: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+  export type NestedJsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type ProfileUpsertWithoutUserInput = {
-    update: XOR<ProfileUpdateWithoutUserInput, ProfileUncheckedUpdateWithoutUserInput>
-    create: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
-    where?: ProfileWhereInput
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type ProfileUpdateToOneWithWhereWithoutUserInput = {
-    where?: ProfileWhereInput
-    data: XOR<ProfileUpdateWithoutUserInput, ProfileUncheckedUpdateWithoutUserInput>
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type ProfileUpdateWithoutUserInput = {
-    contact?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-    age?: IntFieldUpdateOperationsInput | number
-    type?: EnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType
-    college?: StringFieldUpdateOperationsInput | string
-    course_passed?: StringFieldUpdateOperationsInput | string
-    passing_year?: IntFieldUpdateOperationsInput | number
-    experience?: IntFieldUpdateOperationsInput | number
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
-  export type ProfileUncheckedUpdateWithoutUserInput = {
-    contact?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-    age?: IntFieldUpdateOperationsInput | number
-    type?: EnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType
-    college?: StringFieldUpdateOperationsInput | string
-    course_passed?: StringFieldUpdateOperationsInput | string
-    passing_year?: IntFieldUpdateOperationsInput | number
-    experience?: IntFieldUpdateOperationsInput | number
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
-  export type UserCreateWithoutProfileInput = {
-    id?: string
-    email: string
-    first_name: string
-    last_name: string
-    password: string
+  export type BookingsCreateWithoutUserInput = {
+    status: string
     createdAt?: Date | string
-    updatedAt?: Date | string
+    bootcamp: BootcampCreateNestedOneWithoutBookingsInput
+    payment?: PaymentCreateNestedManyWithoutBookingInput
   }
 
-  export type UserUncheckedCreateWithoutProfileInput = {
-    id?: string
-    email: string
-    first_name: string
-    last_name: string
-    password: string
+  export type BookingsUncheckedCreateWithoutUserInput = {
+    booking_id?: number
+    bootcampId: number
+    status: string
     createdAt?: Date | string
-    updatedAt?: Date | string
+    payment?: PaymentUncheckedCreateNestedManyWithoutBookingInput
   }
 
-  export type UserCreateOrConnectWithoutProfileInput = {
+  export type BookingsCreateOrConnectWithoutUserInput = {
+    where: BookingsWhereUniqueInput
+    create: XOR<BookingsCreateWithoutUserInput, BookingsUncheckedCreateWithoutUserInput>
+  }
+
+  export type BookingsCreateManyUserInputEnvelope = {
+    data: BookingsCreateManyUserInput | BookingsCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BookingsUpsertWithWhereUniqueWithoutUserInput = {
+    where: BookingsWhereUniqueInput
+    update: XOR<BookingsUpdateWithoutUserInput, BookingsUncheckedUpdateWithoutUserInput>
+    create: XOR<BookingsCreateWithoutUserInput, BookingsUncheckedCreateWithoutUserInput>
+  }
+
+  export type BookingsUpdateWithWhereUniqueWithoutUserInput = {
+    where: BookingsWhereUniqueInput
+    data: XOR<BookingsUpdateWithoutUserInput, BookingsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BookingsUpdateManyWithWhereWithoutUserInput = {
+    where: BookingsScalarWhereInput
+    data: XOR<BookingsUpdateManyMutationInput, BookingsUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type BookingsScalarWhereInput = {
+    AND?: BookingsScalarWhereInput | BookingsScalarWhereInput[]
+    OR?: BookingsScalarWhereInput[]
+    NOT?: BookingsScalarWhereInput | BookingsScalarWhereInput[]
+    booking_id?: IntFilter<"Bookings"> | number
+    userId?: IntFilter<"Bookings"> | number
+    bootcampId?: IntFilter<"Bookings"> | number
+    status?: StringFilter<"Bookings"> | string
+    createdAt?: DateTimeFilter<"Bookings"> | Date | string
+  }
+
+  export type BookingsCreateWithoutBootcampInput = {
+    status: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutBookingsInput
+    payment?: PaymentCreateNestedManyWithoutBookingInput
+  }
+
+  export type BookingsUncheckedCreateWithoutBootcampInput = {
+    booking_id?: number
+    userId: number
+    status: string
+    createdAt?: Date | string
+    payment?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+  }
+
+  export type BookingsCreateOrConnectWithoutBootcampInput = {
+    where: BookingsWhereUniqueInput
+    create: XOR<BookingsCreateWithoutBootcampInput, BookingsUncheckedCreateWithoutBootcampInput>
+  }
+
+  export type BookingsCreateManyBootcampInputEnvelope = {
+    data: BookingsCreateManyBootcampInput | BookingsCreateManyBootcampInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BookingsUpsertWithWhereUniqueWithoutBootcampInput = {
+    where: BookingsWhereUniqueInput
+    update: XOR<BookingsUpdateWithoutBootcampInput, BookingsUncheckedUpdateWithoutBootcampInput>
+    create: XOR<BookingsCreateWithoutBootcampInput, BookingsUncheckedCreateWithoutBootcampInput>
+  }
+
+  export type BookingsUpdateWithWhereUniqueWithoutBootcampInput = {
+    where: BookingsWhereUniqueInput
+    data: XOR<BookingsUpdateWithoutBootcampInput, BookingsUncheckedUpdateWithoutBootcampInput>
+  }
+
+  export type BookingsUpdateManyWithWhereWithoutBootcampInput = {
+    where: BookingsScalarWhereInput
+    data: XOR<BookingsUpdateManyMutationInput, BookingsUncheckedUpdateManyWithoutBootcampInput>
+  }
+
+  export type UserCreateWithoutBookingsInput = {
+    email: string
+    passwordHash: string
+    githubId?: string | null
+    verified?: boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type UserUncheckedCreateWithoutBookingsInput = {
+    user_id?: number
+    email: string
+    passwordHash: string
+    githubId?: string | null
+    verified?: boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type UserCreateOrConnectWithoutBookingsInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+    create: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>
   }
 
-  export type UserUpsertWithoutProfileInput = {
-    update: XOR<UserUpdateWithoutProfileInput, UserUncheckedUpdateWithoutProfileInput>
-    create: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+  export type BootcampCreateWithoutBookingsInput = {
+    name: string
+    description?: string | null
+    schedule: JsonNullValueInput | InputJsonValue
+    dates?: BootcampCreatedatesInput | Date[] | string[]
+    amount: number
+    mentors: string
+  }
+
+  export type BootcampUncheckedCreateWithoutBookingsInput = {
+    bootcamp_id?: number
+    name: string
+    description?: string | null
+    schedule: JsonNullValueInput | InputJsonValue
+    dates?: BootcampCreatedatesInput | Date[] | string[]
+    amount: number
+    mentors: string
+  }
+
+  export type BootcampCreateOrConnectWithoutBookingsInput = {
+    where: BootcampWhereUniqueInput
+    create: XOR<BootcampCreateWithoutBookingsInput, BootcampUncheckedCreateWithoutBookingsInput>
+  }
+
+  export type PaymentCreateWithoutBookingInput = {
+    amount: Decimal | DecimalJsLike | number | string
+    status: string
+    paymentDetails: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type PaymentUncheckedCreateWithoutBookingInput = {
+    payment_id?: number
+    amount: Decimal | DecimalJsLike | number | string
+    status: string
+    paymentDetails: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type PaymentCreateOrConnectWithoutBookingInput = {
+    where: PaymentWhereUniqueInput
+    create: XOR<PaymentCreateWithoutBookingInput, PaymentUncheckedCreateWithoutBookingInput>
+  }
+
+  export type PaymentCreateManyBookingInputEnvelope = {
+    data: PaymentCreateManyBookingInput | PaymentCreateManyBookingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutBookingsInput = {
+    update: XOR<UserUpdateWithoutBookingsInput, UserUncheckedUpdateWithoutBookingsInput>
+    create: XOR<UserCreateWithoutBookingsInput, UserUncheckedCreateWithoutBookingsInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutProfileInput = {
+  export type UserUpdateToOneWithWhereWithoutBookingsInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutProfileInput, UserUncheckedUpdateWithoutProfileInput>
+    data: XOR<UserUpdateWithoutBookingsInput, UserUncheckedUpdateWithoutBookingsInput>
   }
 
-  export type UserUpdateWithoutProfileInput = {
+  export type UserUpdateWithoutBookingsInput = {
     email?: StringFieldUpdateOperationsInput | string
-    first_name?: StringFieldUpdateOperationsInput | string
-    last_name?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    githubId?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
   }
 
-  export type UserUncheckedUpdateWithoutProfileInput = {
+  export type UserUncheckedUpdateWithoutBookingsInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
-    first_name?: StringFieldUpdateOperationsInput | string
-    last_name?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    githubId?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    personalInfo?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type BootcampUpsertWithoutBookingsInput = {
+    update: XOR<BootcampUpdateWithoutBookingsInput, BootcampUncheckedUpdateWithoutBookingsInput>
+    create: XOR<BootcampCreateWithoutBookingsInput, BootcampUncheckedCreateWithoutBookingsInput>
+    where?: BootcampWhereInput
+  }
+
+  export type BootcampUpdateToOneWithWhereWithoutBookingsInput = {
+    where?: BootcampWhereInput
+    data: XOR<BootcampUpdateWithoutBookingsInput, BootcampUncheckedUpdateWithoutBookingsInput>
+  }
+
+  export type BootcampUpdateWithoutBookingsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: JsonNullValueInput | InputJsonValue
+    dates?: BootcampUpdatedatesInput | Date[] | string[]
+    amount?: IntFieldUpdateOperationsInput | number
+    mentors?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BootcampUncheckedUpdateWithoutBookingsInput = {
+    bootcamp_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: JsonNullValueInput | InputJsonValue
+    dates?: BootcampUpdatedatesInput | Date[] | string[]
+    amount?: IntFieldUpdateOperationsInput | number
+    mentors?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PaymentUpsertWithWhereUniqueWithoutBookingInput = {
+    where: PaymentWhereUniqueInput
+    update: XOR<PaymentUpdateWithoutBookingInput, PaymentUncheckedUpdateWithoutBookingInput>
+    create: XOR<PaymentCreateWithoutBookingInput, PaymentUncheckedCreateWithoutBookingInput>
+  }
+
+  export type PaymentUpdateWithWhereUniqueWithoutBookingInput = {
+    where: PaymentWhereUniqueInput
+    data: XOR<PaymentUpdateWithoutBookingInput, PaymentUncheckedUpdateWithoutBookingInput>
+  }
+
+  export type PaymentUpdateManyWithWhereWithoutBookingInput = {
+    where: PaymentScalarWhereInput
+    data: XOR<PaymentUpdateManyMutationInput, PaymentUncheckedUpdateManyWithoutBookingInput>
+  }
+
+  export type PaymentScalarWhereInput = {
+    AND?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
+    OR?: PaymentScalarWhereInput[]
+    NOT?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
+    payment_id?: IntFilter<"Payment"> | number
+    bookingId?: IntFilter<"Payment"> | number
+    amount?: DecimalFilter<"Payment"> | Decimal | DecimalJsLike | number | string
+    status?: StringFilter<"Payment"> | string
+    paymentDetails?: JsonFilter<"Payment">
+    createdAt?: DateTimeFilter<"Payment"> | Date | string
+  }
+
+  export type BookingsCreateWithoutPaymentInput = {
+    status: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutBookingsInput
+    bootcamp: BootcampCreateNestedOneWithoutBookingsInput
+  }
+
+  export type BookingsUncheckedCreateWithoutPaymentInput = {
+    booking_id?: number
+    userId: number
+    bootcampId: number
+    status: string
+    createdAt?: Date | string
+  }
+
+  export type BookingsCreateOrConnectWithoutPaymentInput = {
+    where: BookingsWhereUniqueInput
+    create: XOR<BookingsCreateWithoutPaymentInput, BookingsUncheckedCreateWithoutPaymentInput>
+  }
+
+  export type BookingsUpsertWithoutPaymentInput = {
+    update: XOR<BookingsUpdateWithoutPaymentInput, BookingsUncheckedUpdateWithoutPaymentInput>
+    create: XOR<BookingsCreateWithoutPaymentInput, BookingsUncheckedCreateWithoutPaymentInput>
+    where?: BookingsWhereInput
+  }
+
+  export type BookingsUpdateToOneWithWhereWithoutPaymentInput = {
+    where?: BookingsWhereInput
+    data: XOR<BookingsUpdateWithoutPaymentInput, BookingsUncheckedUpdateWithoutPaymentInput>
+  }
+
+  export type BookingsUpdateWithoutPaymentInput = {
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBookingsNestedInput
+    bootcamp?: BootcampUpdateOneRequiredWithoutBookingsNestedInput
+  }
+
+  export type BookingsUncheckedUpdateWithoutPaymentInput = {
+    booking_id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    bootcampId?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingsCreateManyUserInput = {
+    booking_id?: number
+    bootcampId: number
+    status: string
+    createdAt?: Date | string
+  }
+
+  export type BookingsUpdateWithoutUserInput = {
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bootcamp?: BootcampUpdateOneRequiredWithoutBookingsNestedInput
+    payment?: PaymentUpdateManyWithoutBookingNestedInput
+  }
+
+  export type BookingsUncheckedUpdateWithoutUserInput = {
+    booking_id?: IntFieldUpdateOperationsInput | number
+    bootcampId?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+  }
+
+  export type BookingsUncheckedUpdateManyWithoutUserInput = {
+    booking_id?: IntFieldUpdateOperationsInput | number
+    bootcampId?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingsCreateManyBootcampInput = {
+    booking_id?: number
+    userId: number
+    status: string
+    createdAt?: Date | string
+  }
+
+  export type BookingsUpdateWithoutBootcampInput = {
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBookingsNestedInput
+    payment?: PaymentUpdateManyWithoutBookingNestedInput
+  }
+
+  export type BookingsUncheckedUpdateWithoutBootcampInput = {
+    booking_id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+  }
+
+  export type BookingsUncheckedUpdateManyWithoutBootcampInput = {
+    booking_id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentCreateManyBookingInput = {
+    payment_id?: number
+    amount: Decimal | DecimalJsLike | number | string
+    status: string
+    paymentDetails: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type PaymentUpdateWithoutBookingInput = {
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    paymentDetails?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentUncheckedUpdateWithoutBookingInput = {
+    payment_id?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    paymentDetails?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentUncheckedUpdateManyWithoutBookingInput = {
+    payment_id?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    paymentDetails?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
@@ -3967,13 +8308,37 @@ export namespace Prisma {
    * Aliases for legacy arg types
    */
     /**
+     * @deprecated Use UserCountOutputTypeDefaultArgs instead
+     */
+    export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use BootcampCountOutputTypeDefaultArgs instead
+     */
+    export type BootcampCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BootcampCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use BookingsCountOutputTypeDefaultArgs instead
+     */
+    export type BookingsCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BookingsCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use UserDefaultArgs instead
      */
     export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use ProfileDefaultArgs instead
+     * @deprecated Use BootcampDefaultArgs instead
      */
-    export type ProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProfileDefaultArgs<ExtArgs>
+    export type BootcampArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BootcampDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MentorDefaultArgs instead
+     */
+    export type MentorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MentorDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use BookingsDefaultArgs instead
+     */
+    export type BookingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BookingsDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PaymentDefaultArgs instead
+     */
+    export type PaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PaymentDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

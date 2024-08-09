@@ -1,0 +1,7 @@
+summary: Delete Bookings
+tasks:
+  - id: gs_bootcamp_bookings_delete
+    fn: datasource.gs_bootcamp.Bookings.delete
+    args:
+      where:
+        booking_id: <% parseInt(inputs.params.booking_id) %>

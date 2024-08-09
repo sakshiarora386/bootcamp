@@ -1,5 +1,58 @@
-# REGISTER USER
-http.post./gs_bootcamp/register:
+# GITHUB LOGIN
+http.get./gs_bootcamp/user/github_auth:
+  summary: github_Auth
+  description: authenticate User from github
+  fn: com.biz.gs_bootcamp.user.github_auth
+  authn: false
+  params:
+    - name: client_id
+      in: query
+      required: true
+      schema:
+        type: string
+  # responses:
+  #   '200':
+  #     content:
+  #       application/json:
+  #         schema:
+  #           type: object
+
+# GITHUB CALLBACK
+http.get./callback:
+  summary: Github Callback
+  description: callback from github with access_token
+  fn: com.biz.gs_bootcamp.user.git_callback
+  authn: false
+  params:
+    - name: token
+      in: query
+      required: true
+      schema:
+        type: string
+  # body:
+  #   content:
+  #     application/json:
+  #       schema:
+  #         $ref: '#/definitions/gs_bootcamp/Profile'
+  # body:
+  #   content:
+  #     application/json:
+  #       schema:
+  #         type: object
+  #         properties:
+  #           client_id: 
+  #             type: string 
+  #           client_secret: 
+  #             type: string 
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# CREATE/ SIGN UP
+http.post./gs_bootcamp/user/signup:
   summary: Create a new User
   description: Create User from database
   fn: com.biz.gs_bootcamp.user.create
@@ -15,87 +68,31 @@ http.post./gs_bootcamp/register:
           schema:
             type: object
 
-# authenticate USER LOGIN
-http.post./gs_bootcamp/login:
-  summary: authenticate User
-  description: Authenticate User from database
-  fn: com.biz.gs_bootcamp.user.auth_login
+# LOGIN
+http.post./gs_bootcamp/user/login:
+  summary: Fetch User
+  description: Fetch User from database
+  fn: com.biz.gs_bootcamp.user.login
   body:
     content:
       application/json:
         schema:
           $ref: '#/definitions/gs_bootcamp/User'
   responses:
-    '201':
+    '200':
       content:
         application/json:
           schema:
             type: object
 
-# Register User using Github
-http.get./gs_bootcamp/auth/github:
-  summary: auth_user_github
-  description: authenticate User from github
-  fn: com.biz.gs_bootcamp.user.auth_github
-  authn: false
-  params:
-    - name: client_id
-      in: query
-      required: true
-      schema:
-        type: string
-  # responses:
-  #  '200':
-  #    content:
-  #      application/json:
-  #        schema:
-  #         type: object
-
-# GITHUB CALLBACK to Profile
-http.get./callback:
-  summary: User Profile Section
-  description: callback from github with access_token
-  fn: helloworld
-  # fn: com.biz.gs_bootcamp.user.one
-  authn: false
-  params:
-    - name: code
-      in: query
-      required: true
-      schema:
-        type: string
-
-  #   - name: user_id
-  #     in: path
-  #     required: true
-  #     schema:
-  #       type: string
-
-# UPDATE PROFILE
-http.put./gs_bootcamp/profile:
-  summary: User Profile Section
-  description: update user profile
-  fn: com.biz.gs_bootcamp.user.update
-  authn: false
-  body:
-    content:
-      application/json:
-        schema:
-          $ref: '#/definitions/gs_bootcamp/User'
-  params:
-    - name: user_id
-      in: path
-      required: true
-      schema:
-        type: string
 
 # ONE
-http.get./gs_bootcamp/user/{user_id}:
+http.get./gs_bootcamp/user/{id}:
   summary: Fetch User
   description: Fetch User from database
   fn: com.biz.gs_bootcamp.user.one
   params:
-    - name: user_id
+    - name: id
       in: path
       required: true
       schema:
@@ -107,9 +104,8 @@ http.get./gs_bootcamp/user/{user_id}:
           schema:
             type: object
 
-
 # UPDATE
-http.put./gs_bootcamp/user/{user_id}:
+http.put./gs_bootcamp/user/{id}:
   summary: Update a User
   description: Update User from database
   fn: com.biz.gs_bootcamp.user.update
@@ -119,7 +115,7 @@ http.put./gs_bootcamp/user/{user_id}:
         schema:
           $ref: '#/definitions/gs_bootcamp/User'
   params:
-    - name: user_id
+    - name: id
       in: path
       required: true
       schema:
@@ -132,12 +128,12 @@ http.put./gs_bootcamp/user/{user_id}:
             type: object
 
 # DELETE
-http.delete./gs_bootcamp/user/{user_id}:
+http.delete./gs_bootcamp/user/{id}:
   summary: Delete a User
   description: Delete User from database
   fn: com.biz.gs_bootcamp.user.delete
   params:
-    - name: user_id
+    - name: id
       in: path
       required: true
       schema:

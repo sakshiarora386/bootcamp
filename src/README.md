@@ -8,3 +8,6 @@ Add your [configuration](https://codesandbox.io/docs/projects/learn/setting-up/t
 
 - [CodeSandbox — Docs](https://codesandbox.io/docs/projects)
 - [CodeSandbox — Discord](https://discord.gg/Ggarp3pX5H)
+
+client id - Ov23liteBuiZovfdjDH5
+client secret - f098e7267ac5865d63a515cf122cdf4e2c8265ae

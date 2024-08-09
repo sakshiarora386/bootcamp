@@ -1,0 +1,7 @@
+summary: Fetch Mentor
+tasks:
+  - id: gs_bootcamp_mentor_one
+    fn: datasource.gs_bootcamp.Mentor.findUnique
+    args:
+      where:
+        mentor_id: <% parseInt(inputs.params.mentor_id) %>

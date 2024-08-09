@@ -1,0 +1,47 @@
+summary: Let user Logsin after validaing credentials
+tasks:
+  - id: check_login_detail  
+    fn: datasource.gs_bootcamp.User.findUnique
+    args:
+      where:
+        email: <% inputs.body.email %>
+
+  - id: check_outputs
+    fn: com.gs.transform
+    # args: <% outputs.check_login_detail.data.passwordHash %>
+    args: <% inputs.body.user_id %>
+       
+
+  # Password encryption
+  #  check outputs.previous function here
+  - id: if
+    fn: com.gs.if
+    condition: <% (inputs.body.passwordHash === outputs.check_login_detail.data.passwordHash) %>
+    tasks:
+     - id: user_login_success
+       fn: datasource.gs_bootcamp.user.findUnique
+       args:
+        where:
+          user_id: <% outputs.check_login_detail.data.user_id %>
+    logs:
+      before:
+        level: info
+        message: taking user to dashboard
+        attributes:
+          user_id: <% outputs.check_login_detail.data.user_id %> 
+
+  - id: else
+    fn: com.gs.else
+    tasks:
+     - id: match_failed
+       fn: com.gs.return
+       args: 
+         success: false
+         data:
+          message: 'Email or Password is not correct'
+
+
+
+
+ 
+              

@@ -1,0 +1,15 @@
+summary: Fetch Profile
+tasks:
+  - id: gs_bootcamp_profile_one
+    fn: datasource.gs_bootcamp.user.findUnique
+    args:
+      where:
+        user_id: <% outputs.user_login_success.data %>
+    logs:
+      before:
+        level: info
+        message: taking user to dashboard
+        attributes:
+          user_id: <% outputs.user_login_success.data %>
+
+       

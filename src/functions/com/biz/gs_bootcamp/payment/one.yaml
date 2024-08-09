@@ -1,0 +1,7 @@
+summary: Fetch Payment
+tasks:
+  - id: gs_bootcamp_payment_one
+    fn: datasource.gs_bootcamp.Payment.findUnique
+    args:
+      where:
+        payment_id: <% parseInt(inputs.params.payment_id) %>

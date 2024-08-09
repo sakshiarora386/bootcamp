@@ -1,0 +1,63 @@
+User:
+  type: object
+  required: [email, password, first_name]
+  additionalProperties: false
+
+  properties:
+    email:
+      type: string
+      format: email       
+    first_name:
+      type: string
+    last_name:
+      type: string
+    password:
+      type: string
+      minLength: 6
+      maxLength: 20
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+
+Profile:
+  type: object
+  properties:
+    contact:
+      type: string
+      pattern: "^[0-9]{10}$"
+    city:
+      type: string
+    gender:
+      type: string
+      enum:
+        - Male
+        - Female
+        - Other
+        - male
+        - female
+        - other
+
+    age:
+      type: integer
+      minimum: 18
+    type:
+      type: string
+      enum:
+        - College Student
+        - Fresher
+        - Working professional
+        - Woman returning to work
+      nullable: true
+    college:
+      type: string
+    course_passed:
+      type: string
+    passing_year:
+      type: integer
+    experience:
+      type: integer
+    userId:
+      type: string

@@ -112,28 +112,54 @@ Prisma.NullTypes = {
  * Enums
  */
 
+exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
+  Serializable: 'Serializable'
+});
+
 exports.Prisma.UserScalarFieldEnum = {
-  id: 'id',
+  user_id: 'user_id',
   email: 'email',
-  first_name: 'first_name',
-  last_name: 'last_name',
-  password: 'password',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  passwordHash: 'passwordHash',
+  githubId: 'githubId',
+  verified: 'verified',
+  personalInfo: 'personalInfo'
 };
 
-exports.Prisma.ProfileScalarFieldEnum = {
-  id: 'id',
-  contact: 'contact',
-  city: 'city',
-  gender: 'gender',
-  age: 'age',
-  type: 'type',
-  college: 'college',
-  course_passed: 'course_passed',
-  passing_year: 'passing_year',
-  experience: 'experience',
-  userId: 'userId'
+exports.Prisma.BootcampScalarFieldEnum = {
+  bootcamp_id: 'bootcamp_id',
+  name: 'name',
+  description: 'description',
+  schedule: 'schedule',
+  dates: 'dates',
+  amount: 'amount',
+  mentors: 'mentors'
+};
+
+exports.Prisma.MentorScalarFieldEnum = {
+  mentor_id: 'mentor_id',
+  name: 'name',
+  bio: 'bio',
+  expertise: 'expertise'
+};
+
+exports.Prisma.BookingsScalarFieldEnum = {
+  booking_id: 'booking_id',
+  userId: 'userId',
+  bootcampId: 'bootcampId',
+  status: 'status',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PaymentScalarFieldEnum = {
+  payment_id: 'payment_id',
+  bookingId: 'bookingId',
+  amount: 'amount',
+  status: 'status',
+  paymentDetails: 'paymentDetails',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -141,26 +167,38 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
-exports.Gender = exports.$Enums.Gender = {
-  Male: 'Male',
-  Female: 'Female',
-  Other: 'Other'
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 
-exports.StudentType = exports.$Enums.StudentType = {
-  CollegeStudent: 'CollegeStudent',
-  Fresher: 'Fresher',
-  WorkingProfessional: 'WorkingProfessional',
-  Woman_Returning_to_work: 'Woman_Returning_to_work'
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
+
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Profile: 'Profile'
+  Bootcamp: 'Bootcamp',
+  Mentor: 'Mentor',
+  Bookings: 'Bookings',
+  Payment: 'Payment'
 };
 
 /**

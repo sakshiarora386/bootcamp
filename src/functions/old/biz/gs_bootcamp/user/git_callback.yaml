@@ -1,0 +1,22 @@
+summary: Github Authentication callback
+tasks:
+  - id: git_callback
+    fn: datasource.api.post./login/oauth/authorize/access_token
+    args:  
+      # headers:
+      #   'X-Requested-With': 'XMLHttpRequest'
+      # params:
+      data:
+        client_id: "Ov23liteBuiZovfdjDH5"
+        client_secret: "f098e7267ac5865d63a515cf122cdf4e2c8265ae"
+        code:  "code"
+       
+  - id: check
+    fn: com.gs.transform
+    args: <%  outputs.git_callback.data %>    # it returns msg: Cookies must be enabled to use github 
+
+  - id: gs_bootcamp_profile_create
+    fn: datasource.gs_bootcamp.profile.create
+    args: 
+      data: <% inputs.body %>
+      #  <% outputs.data.access_token %>

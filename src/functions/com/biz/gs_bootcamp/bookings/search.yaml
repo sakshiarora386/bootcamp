@@ -1,0 +1,5 @@
+summary: Fetch many Bookings
+tasks:
+  - id: gs_bootcamp_bookings_search
+    fn: datasource.gs_bootcamp.Bookings.findMany
+    args: {}

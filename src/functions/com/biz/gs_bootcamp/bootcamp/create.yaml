@@ -1,0 +1,6 @@
+summary: Create Bootcamp
+tasks:
+  - id: gs_bootcamp_bootcamp_create
+    fn: datasource.gs_bootcamp.Bootcamp.create
+    args:
+      data: <% inputs.body %>

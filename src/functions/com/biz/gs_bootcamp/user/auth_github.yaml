@@ -1,0 +1,13 @@
+summary: Github Authentication
+tasks:
+  - id: check variable
+    fn: com.gs.transform
+    args: <% config.bootcamp_students_api.auth.clientId %>
+
+
+  - id: auth_github
+    fn: datasource.api.get./login/oauth/authorize
+    args:
+      params:
+        client_id: <% config.bootcamp_students_api.auth.clientId %>
+   

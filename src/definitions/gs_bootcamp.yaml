@@ -1,62 +1,84 @@
 User:
   type: object
-  required: [email, password, first_name]
-  additionalProperties: false
-
   properties:
+    user_id:
+      type: integer
     email:
       type: string
-      format: email       
-    first_name:
+    passwordHash:
       type: string
-    last_name:
+    githubId:
       type: string
-    password:
+      nullable: true
+    verified:
+      type: boolean
+      default: false
+    personalInfo:
+      type: object
+      nullable: true
+Bootcamp:
+  type: object
+  properties:
+    bootcamp_id:
+      type: integer
+    name:
       type: string
-      minLength: 6
-      maxLength: 20
+    description:
+      type: string
+      nullable: true
+    schedule:
+      type: object
+      nullable: true
+    dates:
+      type: array
+      format: date-time
+      items:
+        type: string
+    amount:
+      type: integer
+    mentors:
+      type: string
+Mentor:
+  type: object
+  properties:
+    mentor_id:
+      type: integer
+    name:
+      type: string
+    bio:
+      type: string
+      nullable: true
+    expertise:
+      type: string
+      nullable: true
+Bookings:
+  type: object
+  properties:
+    booking_id:
+      type: integer
+    userId:
+      type: integer
+    bootcampId:
+      type: integer
+    status:
+      type: string
     createdAt:
       type: string
       format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-
-Profile:
+Payment:
   type: object
   properties:
-    contact:
-      type: string
-      pattern: "^[0-9]{10}$"
-    city:
-      type: string
-    gender:
-      type: string
-      enum:
-        - Male
-        - Female
-        - Other
-        - male
-        - female
-        - other
-
-    age:
+    payment_id:
       type: integer
-      minimum: 18
-    type:
-      type: string
-      enum:
-        - College student
-        - Fresher
-        - Working professional
-        - Woman returning to work
-    college:
-      type: string
-    course_passed:
-      type: string
-    passing_year:
+    bookingId:
       type: integer
-    experience:
-      type: integer
-    userId:
+    amount:
+      type: number
+    status:
       type: string
+    paymentDetails:
+      type: object
+      nullable: true
+    createdAt:
+      type: string
+      format: date-time

@@ -1,0 +1,8 @@
+summary: Update Payment
+tasks:
+  - id: gs_bootcamp_payment_update
+    fn: datasource.gs_bootcamp.Payment.update
+    args:
+      where:
+        payment_id: <% parseInt(inputs.params.payment_id) %>
+      data: <% inputs.body %>

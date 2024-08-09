@@ -1,7 +1,0 @@
-summary: Delete Profile
-tasks:
-  - id: gs_bootcamp_profile_delete
-    fn: datasource.gs_bootcamp.Profile.delete
-    args:
-      where:
-        id: <% inputs.params.id %>

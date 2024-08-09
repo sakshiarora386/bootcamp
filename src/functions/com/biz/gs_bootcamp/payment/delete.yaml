@@ -1,0 +1,7 @@
+summary: Delete Payment
+tasks:
+  - id: gs_bootcamp_payment_delete
+    fn: datasource.gs_bootcamp.Payment.delete
+    args:
+      where:
+        payment_id: <% parseInt(inputs.params.payment_id) %>

@@ -1,0 +1,5 @@
+summary: Fetch many Bootcamp
+tasks:
+  - id: gs_bootcamp_bootcamp_search
+    fn: datasource.gs_bootcamp.Bootcamp.findMany
+    args: {}

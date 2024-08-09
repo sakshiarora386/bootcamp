@@ -1,0 +1,8 @@
+summary: Update Bookings
+tasks:
+  - id: gs_bootcamp_bookings_update
+    fn: datasource.gs_bootcamp.Bookings.update
+    args:
+      where:
+        booking_id: <% parseInt(inputs.params.booking_id) %>
+      data: <% inputs.body %>

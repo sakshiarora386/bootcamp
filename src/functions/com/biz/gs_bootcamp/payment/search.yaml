@@ -1,0 +1,5 @@
+summary: Fetch many Payment
+tasks:
+  - id: gs_bootcamp_payment_search
+    fn: datasource.gs_bootcamp.Payment.findMany
+    args: {}

@@ -1,0 +1,7 @@
+summary: Delete Mentor
+tasks:
+  - id: gs_bootcamp_mentor_delete
+    fn: datasource.gs_bootcamp.Mentor.delete
+    args:
+      where:
+        mentor_id: <% parseInt(inputs.params.mentor_id) %>

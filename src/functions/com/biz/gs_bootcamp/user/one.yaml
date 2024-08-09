@@ -4,4 +4,4 @@ tasks:
     fn: datasource.gs_bootcamp.User.findUnique
     args:
       where:
-        id: <% inputs.params.id %>
+        user_id: <% parseInt(inputs.params.user_id) %>

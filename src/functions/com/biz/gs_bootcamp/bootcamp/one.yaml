@@ -1,0 +1,7 @@
+summary: Fetch Bootcamp
+tasks:
+  - id: gs_bootcamp_bootcamp_one
+    fn: datasource.gs_bootcamp.Bootcamp.findUnique
+    args:
+      where:
+        bootcamp_id: <% parseInt(inputs.params.bootcamp_id) %>

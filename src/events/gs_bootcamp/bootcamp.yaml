@@ -1,0 +1,93 @@
+# ONE
+http.get./gs_bootcamp/bootcamp/{bootcamp_id}:
+  summary: Fetch Bootcamp
+  description: Fetch Bootcamp from database
+  fn: com.biz.gs_bootcamp.bootcamp.one
+  params:
+    - name: bootcamp_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# CREATE
+http.post./gs_bootcamp/bootcamp:
+  summary: Create a new Bootcamp
+  description: Create Bootcamp from database
+  fn: com.biz.gs_bootcamp.bootcamp.create
+  body:
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/gs_bootcamp/Bootcamp'
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# UPDATE
+http.put./gs_bootcamp/bootcamp/{bootcamp_id}:
+  summary: Update a Bootcamp
+  description: Update Bootcamp from database
+  fn: com.biz.gs_bootcamp.bootcamp.update
+  body:
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/gs_bootcamp/Bootcamp'
+  params:
+    - name: bootcamp_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# DELETE
+http.delete./gs_bootcamp/bootcamp/{bootcamp_id}:
+  summary: Delete a Bootcamp
+  description: Delete Bootcamp from database
+  fn: com.biz.gs_bootcamp.bootcamp.delete
+  params:
+    - name: bootcamp_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '202':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# SEARCH
+http.post./gs_bootcamp/bootcamp/search:
+  summary: Fetch multiple Bootcamp
+  description: Fetch multiple Bootcamp from database
+  fn: com.biz.gs_bootcamp.bootcamp.search
+  body:
+    content:
+      application/json:
+        schema:
+          type: object
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: array
+

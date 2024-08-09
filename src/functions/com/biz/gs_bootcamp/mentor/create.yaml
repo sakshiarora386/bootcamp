@@ -1,0 +1,6 @@
+summary: Create Mentor
+tasks:
+  - id: gs_bootcamp_mentor_create
+    fn: datasource.gs_bootcamp.Mentor.create
+    args:
+      data: <% inputs.body %>

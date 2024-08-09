@@ -1,0 +1,93 @@
+# ONE
+http.get./gs_bootcamp/payment/{payment_id}:
+  summary: Fetch Payment
+  description: Fetch Payment from database
+  fn: com.biz.gs_bootcamp.payment.one
+  params:
+    - name: payment_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# CREATE
+http.post./gs_bootcamp/payment:
+  summary: Create a new Payment
+  description: Create Payment from database
+  fn: com.biz.gs_bootcamp.payment.create
+  body:
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/gs_bootcamp/Payment'
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# UPDATE
+http.put./gs_bootcamp/payment/{payment_id}:
+  summary: Update a Payment
+  description: Update Payment from database
+  fn: com.biz.gs_bootcamp.payment.update
+  body:
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/gs_bootcamp/Payment'
+  params:
+    - name: payment_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# DELETE
+http.delete./gs_bootcamp/payment/{payment_id}:
+  summary: Delete a Payment
+  description: Delete Payment from database
+  fn: com.biz.gs_bootcamp.payment.delete
+  params:
+    - name: payment_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '202':
+      content:
+        application/json:
+          schema:
+            type: object
+
+# SEARCH
+http.post./gs_bootcamp/payment/search:
+  summary: Fetch multiple Payment
+  description: Fetch multiple Payment from database
+  fn: com.biz.gs_bootcamp.payment.search
+  body:
+    content:
+      application/json:
+        schema:
+          type: object
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: array
+

@@ -1,8 +1,0 @@
-summary: Update Profile
-tasks:
-  - id: gs_bootcamp_profile_update
-    fn: datasource.gs_bootcamp.Profile.update
-    args:
-      where:
-        id: <% inputs.params.id %>
-      data: <% inputs.body %>
